@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.86 28.4">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <g id="Design">
+    <polygon class="cls-1" points="14.93 1.62 18.09 11.35 28.32 11.35 20.05 17.36 23.21 27.09 14.93 21.08 6.65 27.09 9.82 17.36 1.54 11.35 11.77 11.35 14.93 1.62"/>
+  </g>
+</svg>
