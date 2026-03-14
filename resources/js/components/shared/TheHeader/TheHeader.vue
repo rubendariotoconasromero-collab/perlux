@@ -2,22 +2,25 @@
   <div>
     <header id="main-header" class="fixed-top"
       :class="{ 'header-scrolled': activeDropdown === 'bodys' || activeDropdown === 'jeans' || scrolled }">
-      <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg p-0">
+      <div class="container-fluid px-lg-4 px-2">
+        <nav class="navbar navbar-expand-lg p-0 w-100 d-flex align-items-center">
           
-          <button class="navbar-toggler order-1 d-lg-none" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+          <button class="navbar-toggler border-0 p-0 order-1 d-lg-none custom-toggler" type="button" @click="toggleMobileMenu" aria-label="Menu">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
           </button>
 
-          <a href="/" class="navbar-brand order-2 order-lg-1">
-            <img src="/images/site/resources/logo_perlux.svg" alt="Perlux Logo" class="img-fluid" loading="lazy"/>
+          <a href="/" class="navbar-brand order-2 order-lg-1 brand-center-mobile">
+            <img src="/images/site/resources/logo_perlux.svg" alt="Perlux Logo" class="logo-img" loading="lazy"/>
           </a>
 
-          <div class="d-flex align-items-center order-3 order-lg-3">
-            <a href="/user" class="me-3 nav-icon-link" id="user-nav-link" style="text-decoration:none">
+          <div class="nav-icons-wrapper d-flex align-items-center order-3 ms-auto ms-lg-0">
+            <a href="/user" class="nav-icon-link me-3" id="user-nav-link" aria-label="Usuario">
               <template v-if="!user">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </template>
               <template v-else>
                 <div class="user-avatar" :title="user.name">
@@ -26,108 +29,98 @@
               </template>
             </a>
             
-            <a href="#" class="me-3 position-relative nav-icon-link" @click.prevent="toggleFavoritesSidebar">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-              <span v-if="favoritesCount > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark favorites-badge">
+            <a href="#" class="nav-icon-link position-relative me-3" @click.prevent="toggleFavoritesSidebar" aria-label="Favoritos">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              <span v-if="favoritesCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill custom-badge">
                 {{ favoritesCount }}
               </span>
             </a>
 
-            <a href="#" class="position-relative nav-icon-link" @click.prevent="toggleCartSidebar">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-              <span v-if="cartCount > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark favorites-badge">
+            <a href="#" class="nav-icon-link position-relative" @click.prevent="toggleCartSidebar" aria-label="Carrito">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span v-if="cartCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill custom-badge">
                 {{ cartCount }}
               </span>
             </a>
           </div>
 
-          <div class="collapse navbar-collapse order-4 order-lg-2 justify-content-center" id="navbarNav">
+          <div class="collapse navbar-collapse order-4 order-lg-2 justify-content-center d-none d-lg-flex" id="navbarNavDesktop">
             <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link" href="/">Inicio</a>
               </li>
               
-              <li class="nav-item dropdown" @mouseenter="showDropdown('bodys')" @mouseleave="hideDropdown('bodys')">
-                <a class="nav-link" href="/glam" role="button" :class="{ active: activeDropdown === 'bodys' }">
-                  Glam
-                </a>
-                <div class="dropdown-menu collections-dropdown" :class="{ 'show': activeDropdown === 'bodys' }">
-                  <div class="container py-4"> 
-                    <div class="row">
-                      <div class="col-lg-3 d-flex align-items-center justify-content-center border-end">
-                          <img src="/images/site/resources/glam-plomo.svg" alt="Perlux Glam" class="img-fluid" style="max-width: 160px;">
+              <li class="nav-item dropdown position-relative" @mouseenter="showDropdown('bodys')" @mouseleave="hideDropdown('bodys')">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                  <a class="nav-link" href="/glam" :class="{ active: activeDropdown === 'bodys' }">Glam</a>
+                </div>
+                
+                <div class="dropdown-menu collections-dropdown shadow-sm" :class="{ 'show': activeDropdown === 'bodys' }">
+                  <div class="container py-lg-4 py-2"> 
+                    <div class="row align-items-center">
+                      <div class="col-lg-3 d-none d-lg-flex justify-content-center border-end pe-4">
+                          <img src="/images/site/resources/glam-plomo.svg" alt="Perlux Glam" class="img-fluid" style="max-width: 140px;">
                       </div>
-                      <div class="col-lg-3 ps-5 d-flex flex-column justify-content-center">
-                        <h6 class="dropdown-header text-dark fw-bold mb-3">CATEGORÍAS</h6>
-                        <ul class="list-unstyled category-list">
+                      <div class="col-lg-3 ps-lg-5 mb-4 mb-lg-0">
+                        <h6 class="dropdown-header text-dark fw-bold mb-3 d-none d-lg-block">CATEGORÍAS</h6>
+                        <ul class="list-unstyled category-list m-0">
                           <li v-for="cat in collections.slice(0,4)" :key="cat.CollectionID">
                               <a :href="'/glam?CollectionID='+cat.CollectionID" class="dropdown-item">{{ cat.CollectionName }}</a>
                           </li>
-                          <li class="mt-2"><a href="/glam" class="dropdown-item fw-bold text-decoration-underline">Ver todo</a></li>
+                          <li class="mt-3"><a href="/glam" class="dropdown-item fw-bold text-decoration-underline">Ver todo</a></li>
                         </ul>
                       </div>
 
-                      <div class="col-lg-6">
+                      <div class="col-lg-6 d-none d-lg-block">
                         <div class="row g-3">
                           <div class="col-4 text-center" v-for="collection in collections.slice(-3)" :key="collection.CollectionID">
-                            
                             <a :href="'/glam?CollectionID=' + collection.CollectionID" class="product-preview-link">
-                              
-                              <div class="img-wrapper mb-2">
+                              <div class="img-wrapper mb-2 rounded shadow-sm">
                                 <img :src="collection.Image" :alt="collection.CollectionName" class="img-fluid">
                               </div>
-                              
-                              <span class="fw-bold text-dark small">{{ collection.CollectionName }}</span>
+                              <span class="fw-bold text-dark small text-uppercase">{{ collection.CollectionName }}</span>
                             </a>
-
                           </div>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 </div>
               </li>
 
-              <li class="nav-item dropdown" @mouseenter="showDropdown('jeans')" @mouseleave="hideDropdown('jeans')">
-                <a class="nav-link" href="/novias" role="button" :class="{ active: activeDropdown === 'jeans' }">
-                  Novias
-                </a>
-                <div class="dropdown-menu collections-dropdown" :class="{ 'show': activeDropdown === 'jeans' }">
-                  <div class="container py-4"> 
-                    <div class="row">
-                      <div class="col-lg-3 d-flex align-items-center justify-content-center border-end">
-                          <img src="/images/site/resources/glam-plomo.svg" alt="Perlux Glam" class="img-fluid" style="max-width: 160px;">
+              <li class="nav-item dropdown position-relative" @mouseenter="showDropdown('jeans')" @mouseleave="hideDropdown('jeans')">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                  <a class="nav-link" href="/novias" :class="{ active: activeDropdown === 'jeans' }">Novias</a>
+                </div>
+
+                <div class="dropdown-menu collections-dropdown shadow-sm" :class="{ 'show': activeDropdown === 'jeans' }">
+                  <div class="container py-lg-4 py-2"> 
+                    <div class="row align-items-center">
+                      <div class="col-lg-3 d-none d-lg-flex justify-content-center border-end pe-4">
+                          <img src="/images/site/resources/novias-negro.svg" alt="Perlux Novias" class="img-fluid" style="max-width: 140px;">
                       </div>
-                      <div class="col-lg-3 ps-5 d-flex flex-column justify-content-center">
-                        <h6 class="dropdown-header text-dark fw-bold mb-3">CATEGORÍAS</h6>
-                        <ul class="list-unstyled category-list">
+                      <div class="col-lg-3 ps-lg-5 mb-4 mb-lg-0">
+                        <h6 class="dropdown-header text-dark fw-bold mb-3 d-none d-lg-block">CATEGORÍAS</h6>
+                        <ul class="list-unstyled category-list m-0">
                           <li v-for="cat in collections_novias.slice(0,4)" :key="cat.CollectionID">
                               <a :href="'/novias?CollectionID='+cat.CollectionID" class="dropdown-item">{{ cat.CollectionName }}</a>
                           </li>
-                          <li class="mt-2"><a href="/novias" class="dropdown-item fw-bold text-decoration-underline">Ver todo</a></li>
+                          <li class="mt-3"><a href="/novias" class="dropdown-item fw-bold text-decoration-underline">Ver todo</a></li>
                         </ul>
                       </div>
 
-                      <div class="col-lg-6">
+                      <div class="col-lg-6 d-none d-lg-block">
                         <div class="row g-3">
                           <div class="col-4 text-center" v-for="collection in collections_novias.slice(-3)" :key="collection.CollectionID">
-                            
                             <a :href="'/novias?CollectionID=' + collection.CollectionID" class="product-preview-link">
-                              
-                              <div class="img-wrapper mb-2">
+                              <div class="img-wrapper mb-2 rounded shadow-sm">
                                 <img :src="collection.Image" :alt="collection.CollectionName" class="img-fluid">
                               </div>
-                              
-                              <span class="fw-bold text-dark small">{{ collection.CollectionName }}</span>
+                              <span class="fw-bold text-dark small text-uppercase">{{ collection.CollectionName }}</span>
                             </a>
-
                           </div>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -142,52 +135,70 @@
       </div>
     </header>
 
+    <div class="mobile-menu-sidebar d-lg-none" :class="{ 'active': isMobileMenuOpen }">
+      <div class="mobile-menu-header">
+        <button class="btn-close-menu" @click="closeMobileMenu" aria-label="Cerrar Menú">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="mobile-menu-content">
+        <ul class="mobile-nav-list">
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/glam">Glam</a></li>
+          <li><a href="/novias">Novias</a></li>
+          <li><a href="/nosotros">Nosotros</a></li>
+        </ul>
+      </div>
+
+      <div class="mobile-menu-footer">
+        <a href="/user" class="btn btn-dark w-100 py-3 fw-bold mb-2 text-uppercase">Mi Cuenta</a>
+      </div>
+    </div>
+
     <div class="favorites-sidebar" :class="{ 'active': showFavoritesSidebar }">
       <div class="sidebar-header">
-        <h5 class="mb-0">
-          <i class="fas fa-heart me-2"></i> Mis Favoritos ({{ favoritesCount }})
+        <h5 class="mb-0 fw-bold">
+          <i class="far fa-heart me-2 text-dark"></i> Mis Favoritos ({{ favoritesCount }})
         </h5>
-        <!--<button class="btn-close-sidebar" @click="closeFavoritesSidebar">
-          <i class="fas fa-times"></i>
-        </button>-->
         <button class="btn-close-sidebar" @click="closeFavoritesSidebar" aria-label="Cerrar">
           <i class="fas fa-times"></i>
         </button>
-
       </div>
 
       <div class="sidebar-content">
-        <div v-if="favorites.length === 0" class="empty-favorites">
-          <i class="fas fa-heart-broken empty-icon"></i>
-          <p>No tienes productos en favoritos aún</p>
+        <div v-if="favorites.length === 0" class="empty-state">
+          <i class="far fa-heart empty-icon"></i>
+          <p>Tu lista de deseos está vacía.</p>
+          <a href="/" class="btn btn-outline-dark mt-2" @click="closeFavoritesSidebar">Descubrir productos</a>
         </div>
         <div v-else class="favorites-list">
           <div v-for="product in favorites" :key="product.ProductID" class="favorite-item">
             <div class="favorite-image">
-              <img :src="getProductImage(product)" :alt="product.Name" class="img-fluid">
+              <img :src="getProductImage(product)" :alt="product.Name" loading="lazy">
             </div>
             <div class="favorite-info">
-              <h6 class="product-name">{{ product.Name }}</h6>
+              <h6 class="product-name" :title="product.Name">{{ product.Name }}</h6>
               <p class="product-price">S/{{ product.Price }}</p>
-              <a :href="'/detail_glam?product_id='+product.ProductID" class="btn btn-sm btn-link px-0 text-decoration-none">Ver producto</a>
+              <a :href="'/detail_glam?product_id='+product.ProductID" class="link-view">Ver detalles</a>
             </div>
-            <div class="favorite-actions">
-              <button class="btn-remove-favorite" @click="removeFavorite(product)">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
+            <button class="btn-remove" @click="removeFavorite(product)" title="Eliminar">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
         </div>
       </div>
       <div v-if="favorites.length > 0" class="sidebar-footer">
-        <a href="/user?section=favoritos" class="btn btn-primary w-100">Ver todos</a>
+        <a href="/user?section=favoritos" class="btn btn-dark w-100 fw-bold py-3">VER TODOS MIS FAVORITOS</a>
       </div>
     </div>
     
     <div class="favorites-sidebar" :class="{ 'active': showCartSidebar }">
       <div class="sidebar-header">
-        <h5 class="mb-0">
-          <i class="fas fa-shopping-cart me-2"></i> Mi Carrito ({{ cartCount }})
+        <h5 class="mb-0 fw-bold">
+          <i class="fas fa-shopping-bag me-2 text-dark"></i> Mi Carrito ({{ cartCount }})
         </h5>
         <button class="btn-close-sidebar" @click="closeCartSidebar">
           <i class="fas fa-times"></i>
@@ -195,50 +206,41 @@
       </div>
 
       <div class="sidebar-content">
-        <div v-if="products_carrito.length === 0" class="empty-favorites">
-          <i class="fas fa-shopping-cart empty-icon"></i>
-          <p>Tu carrito está vacío</p>
+        <div v-if="products_carrito.length === 0" class="empty-state">
+          <i class="fas fa-shopping-bag empty-icon"></i>
+          <p>Tu carrito de compras está vacío.</p>
+          <a href="/" class="btn btn-outline-dark mt-2" @click="closeCartSidebar">Ir a la tienda</a>
         </div>
         <div v-else class="favorites-list">
-          <div v-for="(product, index) in products_carrito" 
-               :key="generateCartKey(product, index)" 
-               class="cart-item">
+          <div v-for="(product, index) in products_carrito" :key="generateCartKey(product, index)" class="cart-item">
             <div class="cart-item-image">
-              <img :src="getProductImage(product)" :alt="product.Name" class="product-image">
+              <img :src="getProductImage(product)" :alt="product.Name" loading="lazy">
             </div>
             <div class="cart-item-details">
-              <h6 class="product-title">{{ product.Name }}</h6>
-              <span class="product-price">S/ {{ getCartItemPrice(product) }}</span>
+              <h6 class="product-title" :title="product.Name">{{ product.Name }}</h6>
+              <span class="product-price fw-bold">S/ {{ getCartItemPrice(product) }}</span>
               
-              <div class="product-variants mt-1 text-muted small" v-if="product.selectedVariant">
-                 <div v-if="product.selectedVariant.color">
-                    Color: {{ product.selectedVariant.color.ColorName }}
-                 </div>
-                 <div v-if="product.selectedVariant.size">
-                    Talla: {{ product.selectedVariant.size.SizeName }}
-                 </div>
-                 <div v-if="product.quantity">
-                    Cant: {{ product.quantity }}
-                 </div>
+              <div class="product-variants mt-2" v-if="product.selectedVariant">
+                 <span v-if="product.selectedVariant.color">Color: <strong>{{ product.selectedVariant.color.ColorName }}</strong></span>
+                 <span v-if="product.selectedVariant.size">Talla: <strong>{{ product.selectedVariant.size.SizeName }}</strong></span>
+                 <span v-if="product.quantity">Cant: <strong>{{ product.quantity }}</strong></span>
               </div>
             </div>
-            <div class="cart-item-actions">
-              <button class="btn-remove" @click="removeFromCart(index)">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
+            <button class="btn-remove" @click="removeFromCart(index)" title="Eliminar">
+              <i class="fas fa-trash-alt" style="font-size:0.9rem;"></i>
+            </button>
           </div>
         </div>
       </div>
 
       <div v-if="products_carrito.length > 0" class="sidebar-footer">
-        <div class="cart-total mb-2 d-flex justify-content-between">
-            <span>Total estimado:</span>
-            <strong>S/{{ cartTotal }}</strong>
+        <div class="cart-total d-flex justify-content-between align-items-end mb-3">
+            <span class="text-muted text-uppercase" style="font-size:0.8rem; letter-spacing:1px;">Subtotal estimado</span>
+            <strong class="fs-4">S/{{ cartTotal }}</strong>
         </div>
-        <button @click="handleCartAccess" class="btn btn-primary w-100" :disabled="processingAuth">
+        <button @click="handleCartAccess" class="btn btn-dark w-100 fw-bold py-3" :disabled="processingAuth">
             <span v-if="processingAuth" class="spinner-border spinner-border-sm me-2"></span>
-            {{ processingAuth ? 'Procesando...' : 'Ir a Pagar' }}
+            {{ processingAuth ? 'PROCESANDO...' : 'PROCEDER AL PAGO' }}
         </button>
       </div>
     </div>
@@ -247,15 +249,15 @@
 
     <div class="modal fade" id="authModalCart" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body text-center p-4">
-            <i class="fas fa-lock fa-2x mb-3 text-muted"></i>
-            <h5>Inicia sesión para comprar</h5>
-            <p class="text-muted small mb-4">Necesitas una cuenta para procesar tu pedido.</p>
-            <div class="d-grid gap-2">
-               <a href="/user" class="btn btn-dark">Iniciar Sesión</a>
-               <a href="/register" class="btn btn-outline-dark">Crear Cuenta</a>
-               <button class="btn btn-link text-secondary" @click="closeModalAuthCart">Cancelar</button>
+        <div class="modal-content rounded-0 border-0 shadow">
+          <div class="modal-body text-center p-5">
+            <i class="fas fa-lock fa-3x mb-3 text-muted"></i>
+            <h4 class="fw-bold text-uppercase mb-2">Inicia Sesión</h4>
+            <p class="text-muted small mb-4">Para procesar tu pago de forma segura y rastrear tu pedido, por favor accede a tu cuenta.</p>
+            <div class="d-flex flex-column gap-2">
+               <a href="/user" class="btn btn-dark rounded-0 py-2 fw-bold">INICIAR SESIÓN</a>
+               <a href="/register" class="btn btn-outline-dark rounded-0 py-2 fw-bold">CREAR CUENTA NUEVA</a>
+               <button class="btn btn-link text-muted mt-2 text-decoration-none small" @click="closeModalAuthCart">Continuar comprando</button>
             </div>
           </div>
         </div>
@@ -276,6 +278,7 @@ export default {
   data() {
     return {
       activeDropdown: null,
+      isMobileMenuOpen: false,
       showFavoritesSidebar: false,
       showCartSidebar: false,
       favorites: [],
@@ -299,65 +302,83 @@ export default {
     }
   },
   methods: {
-    // --- Lógica de Interfaz ---
-    showDropdown(type) { this.activeDropdown = type; },
-    hideDropdown(type) { 
-      setTimeout(() => { if (this.activeDropdown === type) this.activeDropdown = null; }, 150); 
+    toggleMobileMenu() {
+      this.isMobileMenuOpen = !this.isMobileMenuOpen;
+      this.showFavoritesSidebar = false;
+      this.showCartSidebar = false;
     },
+    closeMobileMenu() {
+      this.isMobileMenuOpen = false;
+    },
+
+    // --- ACTUALIZA ESTOS MÉTODOS EXISTENTES ---
+    toggleFavoritesSidebar() { 
+      this.showFavoritesSidebar = !this.showFavoritesSidebar; 
+      this.showCartSidebar = false; 
+      this.isMobileMenuOpen = false; // <--- Agrega esto
+    },
+    toggleCartSidebar() { 
+      this.showCartSidebar = !this.showCartSidebar; 
+      this.showFavoritesSidebar = false; 
+      this.isMobileMenuOpen = false; // <--- Agrega esto
+    },
+    closeAllSidebars() { 
+      this.showFavoritesSidebar = false; 
+      this.showCartSidebar = false; 
+      this.isMobileMenuOpen = false; // <--- Agrega esto
+    },
+    showDropdown(type) { 
+      if(window.innerWidth > 991) this.activeDropdown = type; 
+    },
+    hideDropdown(type) { 
+      if(window.innerWidth > 991) {
+        setTimeout(() => { if (this.activeDropdown === type) this.activeDropdown = null; }, 150); 
+      }
+    },
+    // Dropdowns Mobile
+    toggleMobileDropdown(type) {
+      this.activeDropdown = this.activeDropdown === type ? null : type;
+    },
+
+    // Sidebars
     toggleFavoritesSidebar() { this.showFavoritesSidebar = !this.showFavoritesSidebar; this.showCartSidebar = false; },
     closeFavoritesSidebar() { this.showFavoritesSidebar = false; },
     toggleCartSidebar() { this.showCartSidebar = !this.showCartSidebar; this.showFavoritesSidebar = false; },
     closeCartSidebar() { this.showCartSidebar = false; },
     closeAllSidebars() { this.showFavoritesSidebar = false; this.showCartSidebar = false; },
     
-    // --- Lógica de Datos ---
-    
-    // Carga inicial de datos
     updateLocalData() {
-        // Leer Carrito
         const storedCart = localStorage.getItem('products');
         this.products_carrito = storedCart ? JSON.parse(storedCart) : [];
-
-        // Leer Favoritos
         const storedFavs = localStorage.getItem('favorites');
         this.favorites = storedFavs ? JSON.parse(storedFavs) : [];
     },
 
-    // Helpers de visualización
     getUserInitial(name) { return name ? name.charAt(0).toUpperCase() : '?'; },
     
     getProductImage(product) {
         if (product.images && product.images.length > 0) return product.images[0].ImagePath;
-        // Fallback si la estructura es diferente (ej. guardado simplificado en LS)
         return product.image || '/images/placeholder.jpg'; 
     },
 
     getCartItemPrice(product) {
-        // Prioridad: Precio de variante -> Precio base
         if (product.selectedVariant && product.selectedVariant.Price) {
             return product.selectedVariant.Price;
         }
         return product.Price || 0;
     },
 
-    generateCartKey(product, index) {
-        // Clave única para v-for
-        return `${product.ProductID}-${index}`;
-    },
+    generateCartKey(product, index) { return `${product.ProductID}-${index}`; },
 
-    // Acciones
     removeFavorite(product) {
         this.favorites = this.favorites.filter(f => f.ProductID !== product.ProductID);
         localStorage.setItem('favorites', JSON.stringify(this.favorites));
-        // Disparar evento para que otros componentes se actualicen
         window.dispatchEvent(new Event('favorites-updated')); 
     },
 
     removeFromCart(index) {
-        // Usamos índice porque puede haber productos iguales con variantes distintas
         this.products_carrito.splice(index, 1);
         localStorage.setItem('products', JSON.stringify(this.products_carrito));
-        // Disparar evento para que otros componentes se actualicen
         window.dispatchEvent(new Event('cart-updated'));
     },
 
@@ -375,25 +396,12 @@ export default {
         } catch (e) { console.error("Error cargando menú:", e); }
     },
 
-    // handleCartAccess() {
-    //     this.processingAuth = true;
-    //     // Simular pequeño delay
-    //     setTimeout(() => {
-    //         if (!this.user) {
-    //             $('#authModalCart').modal('show');
-    //         } else {
-    //             window.location.href = '/pasarela'; // O tu ruta de checkout
-    //         }
-    //         this.processingAuth = false;
-    //     }, 500);
-    // },
     handleCartAccess() {
         this.processingAuth = true;
         setTimeout(() => {
             if (!this.user) {
                 $('#authModalCart').modal('show');
             } else {
-                // CAMBIO AQUÍ: Redirigir a la nueva ruta de checkout
                 window.location.href = '/checkout'; 
             }
             this.processingAuth = false;
@@ -411,20 +419,10 @@ export default {
     this.getCollections();
     this.getCollectionsNovias();
     window.addEventListener('scroll', this.handleScroll);
-
-    // ESCUCHAR EVENTOS PERSONALIZADOS
-    // Esto permite que cuando ProductDetail actualice LS, el Header se entere.
-    // NOTA: Debes agregar `window.dispatchEvent(new Event('cart-updated'))` 
-    // en tu componente ProductDetail al agregar al carrito.
-    
-    // Listener para almacenamiento nativo (funciona entre pestañas)
     window.addEventListener('storage', this.updateLocalData);
-    
-    // Listener personalizado (funciona en la misma pestaña/app SPA)
     window.addEventListener('cart-updated', this.updateLocalData);
     window.addEventListener('favorites-updated', this.updateLocalData);
     
-    // Intervalo de seguridad (opcional, por si los eventos fallan)
     this.polling = setInterval(() => {
         this.updateLocalData();
     }, 2000); 
@@ -438,676 +436,391 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 /* =========================================
    HEADER GENERAL
    ========================================= */
 #main-header {
   background-color: #ffffff;
-  /* Fondo blanco */
-  padding: 15px 40px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 15px 0;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
+  z-index: 1040;
 }
 
-.navbar-brand img {
-  height: 22px;
+.logo-img {
+  height: 28px; /* Logo más grande en PC */
   width: auto;
+  transition: height 0.3s ease;
 }
 
-/* Enlaces Menú */
 .nav-link {
-  color: #333 !important;
+  color: #1a1a1a !important;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   padding: 10px 20px !important;
-  text-transform: capitalize;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   transition: color 0.2s;
 }
 
-.nav-link:hover,
-.nav-link.active {
-  color: #666 !important;
+.nav-link:hover, .nav-link.active {
+  color: #7a7a7a !important;
 }
 
-/* Iconos */
+/* Íconos Nav */
+.nav-icons-wrapper {
+  gap: 10px; /* Espaciado limpio entre iconos */
+  margin-right:5rem;
+}
+
 .nav-icon-link {
-  color: #333;
-  transition: color 0.2s;
+  color: #1a1a1a;
+  transition: color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 .nav-icon-link:hover {
-  color: #666;
+  color: #7a7a7a;
+  transform: translateY(-2px);
 }
 
-.favorites-badge {
-  font-size: 0.6rem;
-  padding: 3px 5px;
-  min-width: 16px;
+.custom-badge {
+  font-size: 0.65rem;
+  padding: 4px 6px;
+  min-width: 18px;
+  background-color: #5498cf;
+  color: #fff;
+  border: 1px solid #fff; /* Borde blanco para separar del icono */
+  top: 5px !important; /* Ajuste fino vertical */
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background-color: #5498cf;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+.nav-icon-link:hover .user-avatar {
+  background-color: #333;
 }
 
 /* =========================================
-   MEGA MENÚ (DROPDOWN GLAM)
+   MEGA MENÚ DESKTOP
    ========================================= */
 .dropdown-menu.collections-dropdown {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100vw;
-  /* Ancho completo */
   margin-left: calc(-50vw + 50%);
-  /* Centrado full width */
-  margin-top: 0;
   border: none;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid #f5f5f5;
   background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
   display: block;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
-  z-index: 999;
+  z-index: -1;
   border-radius: 0;
+  padding: 0;
 }
 
 .collections-dropdown.show {
   opacity: 1;
   visibility: visible;
+  z-index: 1000;
 }
 
-/* Elementos internos del Mega Menú */
-.border-end {
-  border-right: 1px solid #eee;
-}
-
-.dropdown-header {
-  letter-spacing: 1px;
-  font-size: 0.8rem;
-}
-
-.category-list li {
-  margin-bottom: 8px;
-}
-
+.dropdown-header { letter-spacing: 1px; font-size: 0.8rem; color: #999; }
+.category-list li { margin-bottom: 8px; }
 .dropdown-item {
-  padding: 0;
-  color: #555;
-  background: transparent;
+  padding: 5px 0;
+  color: #444;
   font-size: 0.95rem;
+  background: transparent !important;
   transition: color 0.2s, padding-left 0.2s;
 }
-
-.dropdown-item:hover {
-  color: #000;
-  padding-left: 5px;
-  background: transparent;
-}
-
-/* Imágenes Productos Destacados */
-.product-preview-link {
-  text-decoration: none;
-  display: block;
-  transition: opacity 0.2s;
-}
-
-.product-preview-link:hover {
-  opacity: 0.8;
-}
+.dropdown-item:hover { color: #000; padding-left: 8px; font-weight: 600; }
 
 .img-wrapper {
   width: 100%;
-  height: 180px;
+  height: 200px;
   overflow: hidden;
-  background-color: #f8f9fa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: #f9f9f9;
 }
-
 .img-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
 }
-
-.product-preview-link:hover img {
-  transform: scale(1.05);
-}
-
+.product-preview-link { text-decoration: none; display: block; }
+.product-preview-link:hover img { transform: scale(1.08); }
+.product-preview-link span { display: block; margin-top: 10px; font-size: 0.85rem; letter-spacing: 0.5px; }
 
 /* =========================================
-   SIDEBARS (Estilos básicos)
+   SIDEBARS (FAV Y CARRITO)
    ========================================= */
 .favorites-sidebar {
   position: fixed;
   top: 0;
-  right: -420px; /* Un poco más ancho para mejor visualización */
+  right: -450px;
   width: 420px;
+  max-width: 100vw;
   height: 100vh;
   background: #ffffff;
   z-index: 1060;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08); /* Sombra más suave y difusa */
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1); /* Animación más "premium" */
+  transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-
-.favorites-sidebar.active {
-  right: 0;
-}
+.favorites-sidebar.active { right: 0; }
 
 .sidebar-header {
-  padding: 25px 30px;
+  padding: 25px;
   border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fff;
+  display: flex; justify-content: space-between; align-items: center;
 }
-
-.sidebar-header h5 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: #1a1a1a;
-  display: flex;
-  align-items: center;
+.btn-close-sidebar {
+  background: transparent; border: none; font-size: 1.2rem; color: #999;
+  transition: transform 0.3s, color 0.3s; cursor: pointer;
 }
-
-.sidebar-header h5 i {
-  color: #e74c3c; /* Color rojo sutil para el corazón */
-  font-size: 1rem;
-}
+.btn-close-sidebar:hover { color: #000; transform: rotate(90deg); }
 
 .sidebar-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0; /* Quitamos padding general para que el hover ocupe todo el ancho */
-  scrollbar-width: thin;
-  scrollbar-color: #ddd transparent;
+  flex: 1; overflow-y: auto; padding: 0;
+}
+.sidebar-content::-webkit-scrollbar { width: 5px; }
+.sidebar-content::-webkit-scrollbar-thumb { background-color: #e0e0e0; border-radius: 10px; }
+
+/* Empty State */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; text-align: center; color: #666; padding: 40px;
+}
+.empty-icon { font-size: 3.5rem; margin-bottom: 15px; color: #eaeaea; }
+
+/* Items List */
+.cart-item, .favorite-item {
+  display: flex; gap: 20px; padding: 20px 25px;
+  border-bottom: 1px solid #f8f9fa; position: relative;
+}
+.cart-item-image, .favorite-image {
+  width: 80px; height: 100px; flex-shrink: 0; background: #f9f9f9; overflow: hidden;
+}
+.cart-item-image img, .favorite-image img {
+  width: 100%; height: 100%; object-fit: cover;
 }
 
-/* Scrollbar personalizado para Webkit (Chrome/Edge/Safari) */
-.sidebar-content::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-.sidebar-content::-webkit-scrollbar-thumb {
-  background-color: #ddd;
-  border-radius: 10px;
-}
+.cart-item-details, .favorite-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.product-title, .product-name { font-size: 0.9rem; font-weight: 700; color: #000; margin-bottom: 5px; line-height: 1.3; }
+.product-price { font-size: 0.9rem; color: #555; }
+.link-view { font-size: 0.8rem; color: #7a7a7a; text-decoration: underline; margin-top: 5px; }
+.link-view:hover { color: #000; }
 
-.favorite-item {
-  display: flex;
-  padding: 20px 30px;
-  border-bottom: 1px solid #f8f9fa;
-  position: relative;
-  transition: background-color 0.2s ease;
-  gap: 20px;
-}
-
-.favorite-item:hover {
-  background-color: #fcfcfc;
-}
-
-/* ******* */
-/* Imagen del producto */
-.favorite-image {
-  width: 80px;
-  height: 100px;
-  flex-shrink: 0;
-  background: #f4f4f4;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.favorite-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.favorite-item:hover .favorite-image img {
-  transform: scale(1.05);
-}
-
-/* Información del producto */
-.favorite-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.product-name {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #111;
-  margin-bottom: 5px;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.product-price {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.favorite-info .btn-link {
-  font-size: 0.8rem;
-  color: #000;
-  text-decoration: underline;
-  font-weight: 600;
-  align-self: flex-start;
-  padding: 0;
-  transition: opacity 0.2s;
-}
-
-.favorite-info .btn-link:hover {
-  opacity: 0.7;
-}
-
-.favorite-actions {
-  display: flex;
-  align-items: flex-start;
-}
-
-.btn-remove-favorite {
-  background: transparent;
-  border: none;
-  color: #ccc; /* Gris claro por defecto para no ensuciar visualmente */
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border-radius: 50%;
-}
-
-.btn-remove-favorite:hover {
-  background-color: #fee2e2; /* Fondo rojo muy suave */
-  color: #dc2626; /* Icono rojo */
-}
-
-/* =========================================
-   ESTADO VACÍO (EMPTY STATE)
-   ========================================= */
-.empty-favorites {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  text-align: center;
-  color: #999;
-  padding: 40px;
-}
-
-.empty-icon {
-  font-size: 3.5rem;
-  margin-bottom: 20px;
-  opacity: 0.3;
-  color: #ccc;
-}
-
-.empty-favorites p {
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-/* =========================================
-   FOOTER DEL SIDEBAR
-   ========================================= */
-.sidebar-footer {
-  padding: 25px 30px;
-  border-top: 1px solid #f0f0f0;
-  background: #fff;
-}
-
-.btn-primary.w-100 {
-  padding: 14px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  background: #000;
-  border: 1px solid #000;
-  transition: all 0.3s ease;
-}
-
-.btn-primary.w-100:hover {
-  background: #fff;
-  color: #000;
-}
-
-
-
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1050;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s;
-}
-
-.sidebar-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.cart-item {
-  display: flex;
-  gap: 20px;
-  padding: 20px 30px;
-  border-bottom: 1px solid #f8f9fa;
-  background-color: #fff;
-  transition: background-color 0.2s ease;
-  align-items: flex-start; /* Alineación superior para variantes largas */
-}
-
-.product-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 4px;
-  line-height: 1.2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.product-variants {
-  background-color: #f9f9f9;
-  padding: 8px 10px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  color: #666;
-  line-height: 1.4;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.product-variants div {
-  margin-right: 5px;
-  position: relative;
-}
-
-/* Pequeño separador visual entre variantes (opcional) */
-.product-variants div:not(:last-child)::after {
-  content: "|";
-  color: #ddd;
-  margin-left: 8px;
-}
-
-
-.cart-item-actions {
-  display: flex;
-  align-items: flex-start;
-  padding-top: 2px;
-}
-
-
+/* Variantes visuales sutiles */
+.product-variants { display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.75rem; color: #666; }
+.product-variants span strong { color: #000; }
 
 .btn-remove {
-  background: transparent;
-  border: none;
-  color: #ccc; /* Gris claro por defecto para no ensuciar visualmente */
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border-radius: 50%;
+  background: transparent; border: none; color: #ccc;
+  cursor: pointer; transition: color 0.2s; padding: 0; margin-left: auto;
 }
+.btn-remove:hover { color: #dc3545; }
 
-.btn-remove:hover {
-  background-color: #fee2e2; /* Fondo rojo muy suave */
-  color: #dc2626; /* Icono rojo */
+.sidebar-footer { padding: 25px; border-top: 1px solid #f0f0f0; background: #fff; }
+.sidebar-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4); z-index: 1050; opacity: 0; visibility: hidden; transition: all 0.3s;
+}
+.sidebar-overlay.active { opacity: 1; visibility: visible; }
+
+.brand-center-mobile{
+  margin-left:5rem;
 }
 
 /* =========================================
-   FOOTER DEL CARRITO (TOTALES)
+   RESPONSIVE MÓVIL Y TABLET
    ========================================= */
-/* Ajuste específico para el footer cuando es carrito */
-.sidebar-footer .cart-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.cart-total span {
-  font-size: 1rem;
-  color: #666;
-  font-weight: 500;
-}
-
-.cart-total strong {
-  font-size: 1.2rem;
-  color: #000;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-/* Botón de Pagar / Checkout */
-.btn-primary:disabled {
-  background-color: #ccc;
-  border-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* Spinner dentro del botón */
-.spinner-border-sm {
-  width: 1rem;
-  height: 1rem;
-  border-width: 0.15em;
-}
-
-.cart-item:hover {
-  background-color: #fcfcfc;
-}
-
-.cart-item-image {
-  width: 70px;
-  height: 90px;
-  flex-shrink: 0;
-  background: #f4f4f4;
-  border-radius: 4px;
-  overflow: hidden;
-  position: relative;
-}
-
-.cart-item-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.cart-item-details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.btn-remove{
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  color: #999;
-}
-
-.btn-remove:hover {
-  color: red;
-}
-
-/* Botón de cerrar mejorado */
-.btn-close-sidebar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #f8f9fa;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  color: #555;
-}
-
-.btn-close-sidebar:hover {
-  background: #e9ecef;
-  transform: rotate(90deg); /* Pequeña animación al interactuar */
-  color: #000;
-}
-
-.btn-primary {
-  background: #000;
-  border: 1px solid #000;
-  color: #fff;
-  padding: 10px;
-  border-radius: 0;
-}
-
-.btn-primary:hover {
-  background: #333;
-
-}
-
-.user-avatar {
-  width: 38px;
-  height: 38px;
-  background-color: #111;
-  color: #fff;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  border: 2px solid #fff;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  user-select: none;
-}
-
-.nav-icon-link:hover .user-avatar {
-  background-color: #444;
-  transform: scale(1.1);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  border-color: #f0f0f0;
-}
-
-@media (max-width: 768px) {
- .navbar-brand img {
-    height: 15px;
-    width: auto;
-  }
-
-  .favorites-sidebar {
-    width: 100%;
-    right: -100%;
-  }
-  
-  .favorite-item {
-    padding: 15px 20px;
-  }
-  
-  .favorite-image {
-    width: 70px;
-    height: 90px;
-  }
-}
-
 @media (max-width: 991.98px) {
-  #main-header {
-    padding: 15px 20px;
-  }
+  #main-header { padding: 15px 10px; }
 
+  /* LOGO AL CENTRO EN MÓVIL */
+  .navbar { position: relative; justify-content: space-between; }
+  .brand-center-mobile {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0 !important;
+    z-index: 10; /* Encima de otros elementos */
+  }
+  
+  .logo-img { height: 22px; } /* Ajuste elegante para logo móvil */
+  
+  .custom-toggler { color: #000; padding: 5px !important; z-index: 15; }
+  .nav-icons-wrapper { gap: 0px; z-index: 15; margin-right: 0px;}
+
+  /* OVERLAY DEL MENÚ MÓVIL */
   .navbar-collapse {
     background: #fff;
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 60px; /* Debajo del header */
     left: 0;
-    right: 0;
-    padding: 20px;
-    border-top: 1px solid #eee;
+    width: 100vw;
     height: calc(100vh - 60px);
+    padding: 0;
+    border-top: 1px solid #f0f0f0;
     overflow-y: auto;
+    z-index: 900;
+  }
+  
+  .navbar-nav { padding: 20px; }
+  
+  .nav-item { border-bottom: 1px solid #f5f5f5; }
+  
+  .nav-link {
+    padding: 18px 0 !important;
+    font-size: 1.1rem;
+    font-weight: 700;
   }
 
+  .transition-icon { transition: transform 0.3s ease; }
+  .transition-icon.rotated { transform: rotate(180deg); }
+
+  /* DROPDOWN MÓVIL TIPO ACORDEÓN */
   .collections-dropdown {
-    position: static;
+    position: static !important;
     width: 100%;
-    margin: 0;
-    box-shadow: none;
-    border: none;
-    padding-left: 15px;
-    visibility: visible;
-    opacity: 1;
-    display: none;
-    /* Bootstrap handle toggling */
-  }
-
-  .collections-dropdown.show {
-    display: block;
-  }
-
-  .border-end {
+    margin: 0 !important;
+    box-shadow: none !important;
     border: none !important;
+    padding: 0 0 15px 15px !important;
+    background-color: #fafafa;
+    display: none; /* Controlado por vue class 'show' */
   }
-
-  .col-lg-3 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
-
-  .img-wrapper {
-    height: 120px;
-  }
+  .collections-dropdown.show { display: block; }
+  
+  .category-list a { padding: 10px 0; font-size: 1rem; border-bottom: 1px solid #eee; display: block; }
+  .category-list li:last-child a { border: none; }
 }
 
 @media (max-width: 576px) {
-  .user-avatar {
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
-  }
+  .logo-img { height: 18px; margin-right: 30px; }
+  .user-avatar { width: 28px; height: 28px; font-size: 11px; }
+  .cart-item-image, .favorite-image { width: 70px; height: 90px; }
+  .cart-item, .favorite-item { padding: 15px; }
+}
 
-  .nav-link {
-    padding: 10px 0 !important;
-    font-size: 1.1rem;
-  }
 
-  .cart-item-image {
-    width: 60px;
-    height: 60px;
-  }
 
-  .favorites-sidebar {
-    width: 100%;
-    right: -100%;
+.mobile-menu-sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 85%;
+  max-width: 300px;
+  height: 100vh;
+  background-color: #ffffff;
+  z-index: 1060;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.mobile-menu-sidebar.active {
+  left: 0;
+}
+
+.mobile-menu-header {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: flex-end; /* Manda la X a la derecha */
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.btn-close-menu {
+  background: transparent;
+  border: none;
+  color: #000;
+  padding: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.btn-close-menu:hover {
+  transform: rotate(90deg);
+}
+
+.mobile-menu-content {
+  flex: 1;
+  padding: 30px 25px;
+  overflow-y: auto;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav-list li {
+  margin-bottom: 25px;
+}
+
+.mobile-nav-list a {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.mobile-menu-footer {
+  padding: 25px;
+  background-color: #fff;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* =========================================
+   MEDIA QUERIES LIMPIAS
+   ========================================= */
+@media (max-width: 991.98px) {
+  #main-header { padding: 15px 10px; }
+
+  .navbar { position: relative; justify-content: space-between; }
+  
+  .brand-center-mobile {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0 !important;
+    z-index: 10;
   }
+  
+  .logo-img { height: 22px; }
+  
+  .custom-toggler { color: #000; padding: 5px !important; z-index: 15; outline: none; }
+  .nav-icons-wrapper { gap: 0px; z-index: 15; margin-right: 0px;}
+}
+
+@media (max-width: 576px) {
+  .logo-img { height: 18px; margin-right: 30px; }
+  .user-avatar { width: 28px; height: 28px; font-size: 11px; }
+  .cart-item-image, .favorite-image { width: 70px; height: 90px; }
+  .cart-item, .favorite-item { padding: 15px; }
 }
 </style>
