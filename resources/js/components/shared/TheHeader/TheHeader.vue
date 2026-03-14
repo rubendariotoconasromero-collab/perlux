@@ -311,21 +311,20 @@ export default {
       this.isMobileMenuOpen = false;
     },
 
-    // --- ACTUALIZA ESTOS MÉTODOS EXISTENTES ---
     toggleFavoritesSidebar() { 
       this.showFavoritesSidebar = !this.showFavoritesSidebar; 
       this.showCartSidebar = false; 
-      this.isMobileMenuOpen = false; // <--- Agrega esto
+      this.isMobileMenuOpen = false;
     },
     toggleCartSidebar() { 
       this.showCartSidebar = !this.showCartSidebar; 
       this.showFavoritesSidebar = false; 
-      this.isMobileMenuOpen = false; // <--- Agrega esto
+      this.isMobileMenuOpen = false;
     },
     closeAllSidebars() { 
       this.showFavoritesSidebar = false; 
       this.showCartSidebar = false; 
-      this.isMobileMenuOpen = false; // <--- Agrega esto
+      this.isMobileMenuOpen = false;
     },
     showDropdown(type) { 
       if(window.innerWidth > 991) this.activeDropdown = type; 
@@ -335,12 +334,10 @@ export default {
         setTimeout(() => { if (this.activeDropdown === type) this.activeDropdown = null; }, 150); 
       }
     },
-    // Dropdowns Mobile
+
     toggleMobileDropdown(type) {
       this.activeDropdown = this.activeDropdown === type ? null : type;
     },
-
-    // Sidebars
     toggleFavoritesSidebar() { this.showFavoritesSidebar = !this.showFavoritesSidebar; this.showCartSidebar = false; },
     closeFavoritesSidebar() { this.showFavoritesSidebar = false; },
     toggleCartSidebar() { this.showCartSidebar = !this.showCartSidebar; this.showFavoritesSidebar = false; },
@@ -438,9 +435,7 @@ export default {
 </script>
 
 <style scoped>
-/* =========================================
-   HEADER GENERAL
-   ========================================= */
+
 #main-header {
   background-color: #ffffff;
   padding: 15px 0;
@@ -450,7 +445,7 @@ export default {
 }
 
 .logo-img {
-  height: 28px; /* Logo más grande en PC */
+  height: 28px;
   width: auto;
   transition: height 0.3s ease;
 }
@@ -469,9 +464,8 @@ export default {
   color: #7a7a7a !important;
 }
 
-/* Íconos Nav */
 .nav-icons-wrapper {
-  gap: 10px; /* Espaciado limpio entre iconos */
+  gap: 10px;
   margin-right:5rem;
 }
 
@@ -494,8 +488,8 @@ export default {
   min-width: 18px;
   background-color: #5498cf;
   color: #fff;
-  border: 1px solid #fff; /* Borde blanco para separar del icono */
-  top: 5px !important; /* Ajuste fino vertical */
+  border: 1px solid #fff;
+  top: 5px !important;
 }
 
 .user-avatar {
@@ -516,9 +510,6 @@ export default {
   background-color: #333;
 }
 
-/* =========================================
-   MEGA MENÚ DESKTOP
-   ========================================= */
 .dropdown-menu.collections-dropdown {
   position: absolute;
   top: 100%;
@@ -568,9 +559,6 @@ export default {
 .product-preview-link:hover img { transform: scale(1.08); }
 .product-preview-link span { display: block; margin-top: 10px; font-size: 0.85rem; letter-spacing: 0.5px; }
 
-/* =========================================
-   SIDEBARS (FAV Y CARRITO)
-   ========================================= */
 .favorites-sidebar {
   position: fixed;
   top: 0;
@@ -604,14 +592,12 @@ export default {
 .sidebar-content::-webkit-scrollbar { width: 5px; }
 .sidebar-content::-webkit-scrollbar-thumb { background-color: #e0e0e0; border-radius: 10px; }
 
-/* Empty State */
 .empty-state {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   height: 100%; text-align: center; color: #666; padding: 40px;
 }
 .empty-icon { font-size: 3.5rem; margin-bottom: 15px; color: #eaeaea; }
 
-/* Items List */
 .cart-item, .favorite-item {
   display: flex; gap: 20px; padding: 20px 25px;
   border-bottom: 1px solid #f8f9fa; position: relative;
@@ -629,7 +615,6 @@ export default {
 .link-view { font-size: 0.8rem; color: #7a7a7a; text-decoration: underline; margin-top: 5px; }
 .link-view:hover { color: #000; }
 
-/* Variantes visuales sutiles */
 .product-variants { display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.75rem; color: #666; }
 .product-variants span strong { color: #000; }
 
@@ -650,32 +635,27 @@ export default {
   margin-left:5rem;
 }
 
-/* =========================================
-   RESPONSIVE MÓVIL Y TABLET
-   ========================================= */
 @media (max-width: 991.98px) {
   #main-header { padding: 15px 10px; }
 
-  /* LOGO AL CENTRO EN MÓVIL */
   .navbar { position: relative; justify-content: space-between; }
   .brand-center-mobile {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     margin: 0 !important;
-    z-index: 10; /* Encima de otros elementos */
+    z-index: 10;
   }
   
-  .logo-img { height: 22px; } /* Ajuste elegante para logo móvil */
+  .logo-img { height: 22px; }
   
   .custom-toggler { color: #000; padding: 5px !important; z-index: 15; }
   .nav-icons-wrapper { gap: 0px; z-index: 15; margin-right: 0px;}
 
-  /* OVERLAY DEL MENÚ MÓVIL */
   .navbar-collapse {
     background: #fff;
     position: fixed;
-    top: 60px; /* Debajo del header */
+    top: 60px;
     left: 0;
     width: 100vw;
     height: calc(100vh - 60px);
@@ -698,7 +678,6 @@ export default {
   .transition-icon { transition: transform 0.3s ease; }
   .transition-icon.rotated { transform: rotate(180deg); }
 
-  /* DROPDOWN MÓVIL TIPO ACORDEÓN */
   .collections-dropdown {
     position: static !important;
     width: 100%;
@@ -707,7 +686,7 @@ export default {
     border: none !important;
     padding: 0 0 15px 15px !important;
     background-color: #fafafa;
-    display: none; /* Controlado por vue class 'show' */
+    display: none;
   }
   .collections-dropdown.show { display: block; }
   
@@ -746,7 +725,7 @@ export default {
 .mobile-menu-header {
   padding: 20px 25px;
   display: flex;
-  justify-content: flex-end; /* Manda la X a la derecha */
+  justify-content: flex-end;
   align-items: center;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -795,9 +774,7 @@ export default {
   border-top: 1px solid #f0f0f0;
 }
 
-/* =========================================
-   MEDIA QUERIES LIMPIAS
-   ========================================= */
+
 @media (max-width: 991.98px) {
   #main-header { padding: 15px 10px; }
 

@@ -571,10 +571,9 @@ export default {
     prevImage() { if (this.product.images) this.currentSlide = (this.currentSlide - 1 + this.product.images.length) % this.product.images.length; },
     goToSlide(i) { this.currentSlide = i; },
     
-    // NUEVA LOGICA: Scroll suave nativo para los botones
     scrollSlider(direction) {
       const slider = this.$refs.productSlider;
-      // Scrolla exactamente el ancho visible del contenedor para avanzar a las siguientes tarjetas
+
       const scrollAmount = slider.clientWidth; 
       if (direction === 'left') {
         slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -635,18 +634,13 @@ export default {
 </script>
 
 <style scoped>
-/* ========================
-   ESTILOS GENERALES Y LAYOUT
-   ======================== */
+
 .product-container {
   padding-top: 140px;
   padding-bottom: 50px;
   background: #fff;
 }
 
-/* ========================
-   IMAGEN DEL PRODUCTO PRINCIPAL
-   ======================== */
 .product-image-wrapper-main {
   position: relative;
   width: 100%;
@@ -688,20 +682,15 @@ export default {
 }
 .heart-wishlist:hover { transform: scale(1.1); }
 
-/* ========================
-   DETALLES DEL PRODUCTO (STICKY)
-   ======================== */
 .product-details-sticky { position: sticky; top: 120px; padding: 0 20px; }
 .product-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #000; margin-bottom: 8px; }
 .price { font-size: 1.4rem; color: #333; font-weight: 500; }
 .section-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-/* Colores */
 .color-selector { display: flex; gap: 12px; }
 .color-option { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
 .color-option.active { transform: scale(1.1); box-shadow: 0 0 0 2px #fff, 0 0 0 3px #000; border-color: transparent; }
 
-/* Tallas */
 .size-guide { font-size: 0.8rem; text-decoration: underline; cursor: pointer; color: #666; font-weight: 600; }
 .btn-size-select { border: 1px solid #ddd; background: #fff; color: #333; min-width: 50px; height: 45px; font-weight: 600; border-radius: 4px; transition: all 0.2s ease; }
 .btn-size-select:hover { border-color: #000; }
@@ -709,7 +698,6 @@ export default {
 
 .alert-light-custom { background: #f8f9fa; padding: 10px 15px; border-radius: 4px; font-size: 0.85rem; border: 1px solid #eee; }
 
-/* Botones y Cantidad */
 .quantity-selector { display: flex; border: 1px solid #ddd; border-radius: 4px; width: 120px; }
 .quantity-selector button { font-weight: bold; width: 40px; }
 .quantity-selector input { font-weight: bold; pointer-events: none; }
@@ -725,7 +713,6 @@ export default {
 .text-primary-custom { color: #5b6da0; font-weight: 600; }
 .qualify-link { font-size: 0.85rem; text-decoration: underline; cursor: pointer; color: #555; }
 
-/* Tabs */
 .custom-tabs { display: flex; border-bottom: 2px solid #f0f0f0; }
 .tab-button {
   background: none; border: none; padding: 10px 0; margin-right: 30px;
@@ -734,34 +721,28 @@ export default {
 }
 .tab-button.active { color: #000; border-bottom-color: #000; }
 
-/* ========================
-   SLIDER PRODUCTOS RELACIONADOS Y LOGO
-   ======================== */
 .bg-light-custom { background-color: #fafafa; }
 
-/* LOGO GLAM AJUSTADO */
 .glam-home-image {
   width: 100%;
-  max-width: 220px; /* Reducido para que se vea elegante en PC */
+  max-width: 220px;
   height: auto;
 }
 
-/* CONTENEDOR SLIDER: Padding para alojar las flechas sin cortar el diseño */
 .slider-container {
   position: relative;
-  padding: 0 60px; /* Espacio exacto para los botones laterales */
+  padding: 0 60px;
 }
 
-/* WRAPPER NATIVO: Maneja el scroll y oculta lo que sobra, con Snap */
 .slider-wrapper {
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .slider-wrapper::-webkit-scrollbar {
-  display: none; /* Chrome/Safari/Opera */
+  display: none;
 }
 
 .slider-track { 
@@ -769,10 +750,9 @@ export default {
   gap: 20px; 
 }
 
-/* Cada tarjeta */
 .slider-item { 
   flex: 0 0 280px; 
-  scroll-snap-align: center; /* Alineación perfecta al frenar */
+  scroll-snap-align: center;
 }
 
 .product-image-cards { aspect-ratio: 3/4; object-fit: cover; width: 100%; border-radius:0px; }
@@ -781,7 +761,6 @@ export default {
 .heart-btn-bottom i { font-size: 1.2rem; }
 .text-primary-custom { color: #6da5da !important; }
 
-/* BOTONES DENTRO DE TARJETAS (ESTILO ORIGINAL RESTAURADO) */
 .btn-comprar {
   background: transparent; border: 1px solid #000; color: #000;
   font-weight: 700; font-size: 0.75rem; padding: 10px;
@@ -797,7 +776,7 @@ export default {
 }
 .btn-whatsapp-card:hover, .btn-whatsapp:hover { background-color: #2b8d4f; color: #fff; }
 
-/* FLECHAS DEL SLIDER */
+
 .slider-nav-btn {
   position: absolute; top: 40%; transform: translateY(-50%);
   width: 45px; height: 45px; border-radius: 50%;
@@ -806,12 +785,9 @@ export default {
   display: flex; align-items: center; justify-content: center; cursor: pointer;
   color: #000; font-size: 1.2rem;
 }
-.slider-prev { left: 5px; } /* Se asienta dentro del padding libre */
+.slider-prev { left: 5px; }
 .slider-next { right: 5px; }
 
-/* ========================
-   CALIFICACIONES
-   ======================== */
 .section-title-big { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; }
 .section-divider { width: 60px; border-top: 3px solid #000; opacity: 1; }
 .rating-number { font-size: 4rem; font-weight: 700; line-height: 1; }
@@ -831,9 +807,6 @@ export default {
 .size-guide-table th { background: #f8f9fa; color: #000; font-weight: 700; padding: 15px; border-bottom: 2px solid #000; }
 .size-guide-table td { padding: 15px; border-bottom: 1px solid #eee; }
 
-/* ========================
-   RESPONSIVE MÓVIL
-   ======================== */
 @media (max-width: 991px) {
   .product-details-sticky { position: static; padding: 0; }
 }
@@ -846,12 +819,11 @@ export default {
   .action-buttons-group { flex-direction: column !important; }
   .quantity-selector { width: 100%; justify-content: space-between; margin-bottom: 10px; }
   
-  .glam-home-image { max-width: 160px; } /* Logo aún más chico para móvil */
+  .glam-home-image { max-width: 160px; }
 
-  /* Corrección exacta para que no se corten las flechas ni las imágenes en móvil */
-  .slider-container { padding: 0 40px; } /* Ajusta el espacio lateral para botones */
+  .slider-container { padding: 0 40px; }
   .slider-item { 
-    flex: 0 0 100%; /* Cada producto ocupa el 100% de la zona visible, no más recortes a medias */
+    flex: 0 0 100%;
   }
 }
 </style>

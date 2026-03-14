@@ -371,20 +371,15 @@ export default {
 </script>
 
 <style scoped>
-/* =========================================
-   LAYOUT PRINCIPAL
-   ========================================= */
+
 .collection-container {
-  padding-top: 140px; /* Ajuste para header fixed */
+  padding-top: 140px;
   padding-bottom: 80px;
   background-color: #fff;
   max-width: 1600px;
   margin: 0 auto;
 }
 
-/* =========================================
-   SIDEBAR FILTROS
-   ========================================= */
 .filters-sidebar {
   padding-right: 30px;
   border-right: 1px solid #f0f0f0;
@@ -431,21 +426,17 @@ export default {
   color: #fff;
 }
 
-/* Iconos de acordeón */
 .toggle-icon {
   font-size: 0.8rem;
   transition: transform 0.3s ease;
 }
 
-/* =========================================
-   GRILLA DE PRODUCTOS (Look Cuadrado & Full)
-   ========================================= */
-/* Contenedor Sticky en móvil */
+
 .sticky-mobile-controls {
   position: sticky;
-  top: 70px; /* Ajustar según la altura real de tu header fixed en móvil */
-  z-index: 100; /* Asegura que esté por encima de los productos */
-  margin-top: -10px; /* Compensa márgenes si es necesario */
+  top: 70px;
+  z-index: 100;
+  margin-top: -10px;
   margin-bottom: 20px;
 }
 
@@ -455,26 +446,24 @@ export default {
   flex-direction: column;
 }
 
-/* Contenedor Cuadrado que ocupa todo el espacio */
 .product-image-wrapper-sq {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; /* Cuadrado perfecto */
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background-color: #f7f7f7;
   border: 1px solid #eee;
 }
 
-/* Imagen que llena el card (`cover`) */
 .product-img-full {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Llena el espacio, recorta si es necesario para mantener proporción */
+  object-fit: cover;
   transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .product-card:hover .product-img-full {
-  transform: scale(1.1); /* Zoom elegante al hover */
+  transform: scale(1.1);
 }
 
 .out-of-stock-badge {
@@ -547,7 +536,6 @@ export default {
   color: #fff;
 }
 
-/* View Switcher Móvil */
 .view-switcher { display: flex; gap: 10px; }
 .btn-view {
   background: transparent;
@@ -558,16 +546,13 @@ export default {
 }
 .btn-view.active { color: #000; }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
 @media (min-width: 1200px) {
   .collection-container { padding-left: 60px; padding-right: 60px; }
 }
 
 @media (max-width: 991px) {
   .collection-container {
-    padding-top: 100px; /* Ajuste header móvil */
+    padding-top: 100px;
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -575,26 +560,22 @@ export default {
 }
 
 @media (max-width: 768px) {
-  /* Ajuste top sticky controls basado en altura header real */
   .sticky-mobile-controls { top: 60px; } 
 }
 
 @media (max-width: 576px) {
-  /* Filtros apilados verticalmente en móvil */
   .mobile-filters-row {
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
   
-  /* Ajustes grilla móvil g-2 para menos espacio entre fotos */
   .products-grid > .row { --bs-gutter-x: 0.5rem; --bs-gutter-y: 0.5rem; }
 
   .product-title { font-size: 0.8rem; }
   .btn-buy, .btn-whatsapp { font-size: 0.65rem; padding: 10px 2px; }
 }
 
-/* Transiciones & Utilitarios */
 .slide-fade-enter-active, .slide-fade-leave-active { transition: all 0.15s ease; }
 .slide-fade-enter-from, .slide-fade-leave-to { opacity: 0; transform: translateY(-10px); }
 .rotated { transform: rotate(180deg); }
