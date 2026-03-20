@@ -268,59 +268,7 @@
                             <a href="/glam" class="btn btn-dark px-4 mt-2">Ir a la tienda</a>
                         </div>
 
-                        <!-- <div v-else class="orders-list">
-                            <div v-for="order in purchases" :key="order.OrderID" class="card border-0 shadow-sm mb-4 order-card">
-                                
-                                <div class="card-header bg-white border-bottom p-3 d-flex flex-wrap justify-content-between align-items-center">
-                                    <div class="d-flex flex-column">
-                                        <span class="text-uppercase small text-muted fw-bold">Pedido #{{ order.external_reference }}</span>
-                                        <span class="small text-muted">{{ formatDate(order.created_at) }}</span>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge rounded-pill mb-1" :class="getStatusClass(order.payment_status)">
-                                            {{ getStatusText(order.payment_status) }}
-                                        </span>
-                                        <div class="fw-bold text-dark">Total: S/ {{ order.total_amount }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body p-0">
-                                    <div class="list-group list-group-flush">
-                                        <div v-for="detail in order.order_details" :key="detail.OrderDetailID" class="list-group-item p-3 border-0 border-bottom">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 order-img-wrapper bg-light rounded overflow-hidden">
-                                                    <img :src="getOrderImage(detail)" alt="Producto" class="img-fluid">
-                                                </div>
-                                                
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h6 class="mb-1 product-title-order">{{ detail.product_name }}</h6>
-                                                    
-                                                    <div class="small text-muted mb-1" v-if="detail.product_snapshot">
-                                                        <span v-if="detail.product_snapshot.color">
-                                                            Color: {{ detail.product_snapshot.color }}
-                                                        </span>
-                                                        <span v-if="detail.product_snapshot.size" class="ms-2 border-start ps-2">
-                                                            Talla: {{ detail.product_snapshot.size }}
-                                                        </span>
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-between align-items-center mt-2">
-                                                        <span class="small bg-light px-2 py-1 rounded text-dark">
-                                                            Cant: {{ detail.quantity }}
-                                                        </span>
-                                                        <span class="fw-bold small">S/ {{ detail.unit_price }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-footer bg-white border-0 p-3 text-end">
-                                    <button class="btn btn-sm btn-outline-secondary" disabled>Ver Factura</button>
-                                </div>
-                            </div>
-                        </div> -->
+                       
                         <div v-else class="orders-list">
                             <div v-for="order in purchases" :key="order.OrderID" class="card border-0 shadow-sm mb-3">
                                 <div class="card-body p-3">
@@ -460,7 +408,6 @@ import TheHeader from '../shared/TheHeader/TheHeader.vue';
 import TheFooter from '../shared/TheFooter/TheFooter.vue';
 import { ref, reactive, onMounted } from 'vue';
 
-// DATA REAL: DEPARTAMENTOS Y PROVINCIAS (Mismo que en Registro)
 const ubigeoPeru = [
     { department: "Amazonas", provinces: ["Chachapoyas", "Bagua", "Bongará", "Condorcanqui", "Luya", "Rodríguez de Mendoza", "Utcubamba"] },
     { department: "Áncash", provinces: ["Huaraz", "Aija", "Antonio Raymondi", "Asunción", "Bolognesi", "Carhuaz", "Carlos Fermín Fitzcarrald", "Casma", "Corongo", "Huari", "Huarmey", "Huaylas", "Mariscal Luzuriaga", "Ocros", "Pallasca", "Pomabamba", "Recuay", "Santa", "Sihuas", "Yungay"] },
@@ -502,22 +449,18 @@ export default {
             isEditingUser: false,
             userForm: {},
 
-            // Direcciones
             userAddresses: [],
             showAddressForm: false,
             editingAddress: null,
             selectedAddressId: null,
             newAddress: { department: '', province: '', district: '', street: '', number: '', detail: '' },
 
-            // Ubigeo Lists
             departmentsList: [],
             provincesList: [],
 
-            // Favoritos y Compras
             favorites: [],
             purchases: [],
 
-            // Password
             passwordForm: { password: '', newPassword: '', confirmPassword: '' }
         };
     },
@@ -529,22 +472,19 @@ export default {
     methods: {
         getOrderThumbnail(order) {
             if (order.order_details && order.order_details.length > 0) {
-                // Reutilizamos tu función getOrderImage pasándole el primer detalle
+
                 return this.getOrderImage(order.order_details[0]);
             }
             return '/images/placeholder.jpg';
         },
 
-        // 2. Abrir Modal
         openOrderDetail(order) {
             this.selectedOrder = order;
-            // Abrir modal de Bootstrap mediante JS (asegúrate de tener bootstrap.js cargado)
             const modalEl = document.getElementById('orderDetailModal');
             const modal = new bootstrap.Modal(modalEl);
             modal.show();
         },
 
-        // 3. Comprar de nuevo (Recargar Carrito)
         buyAgain(order) {
             Swal.fire({
                 title: '¿Repetir pedido?',
@@ -556,15 +496,8 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     
-                    // Obtenemos el carrito actual
                     let currentCart = JSON.parse(localStorage.getItem('products')) || [];
-
-                    // Recorremos los items del pedido antiguo
                     order.order_details.forEach(detail => {
-                        // Reconstruimos el objeto producto para el carrito
-                        // NOTA: Aquí asumimos que el producto sigue existiendo.
-                        // Idealmente deberías validar stock antes, pero esto es un atajo rápido.
-                        
                         let snapshot = detail.product_snapshot;
                         if (typeof snapshot === 'string') {
                             try { snapshot = JSON.parse(snapshot); } catch (e) {}
@@ -575,30 +508,27 @@ export default {
                             Name: detail.product_name,
                             Price: detail.unit_price,
                             quantity: detail.quantity,
-                            image: this.getOrderImage(detail), // Usamos la imagen guardada
-                            // Reconstruir estructura de variantes para que el Checkout la entienda
+                            image: this.getOrderImage(detail),
+
                             selectedVariant: {
-                                color: { ColorName: snapshot?.color || 'N/A' },
+                                color: { ColorName: snapshot?.color || 'N/A', ColorID: snapshot?.ColorID || null },
                                 size: { SizeName: snapshot?.size || 'N/A', SizeID: detail.SizeID } 
-                                // OJO: Necesitas guardar SizeID y ColorID en snapshot si quieres exactitud total al re-comprar, 
-                                // o confiar en que el backend valida por texto.
+
                             }
                         };
                         
                         currentCart.push(itemToAdd);
                     });
 
-                    // Guardar y notificar
                     localStorage.setItem('products', JSON.stringify(currentCart));
-                    window.dispatchEvent(new Event('cart-updated')); // Actualiza el header
+                    window.dispatchEvent(new Event('cart-updated'));
                     
                     Swal.fire('¡Listo!', 'Productos agregados al carrito', 'success');
-                    // Opcional: Redirigir al checkout
-                    // window.location.href = '/checkout';
+
                 }
             });
         },
-        // 1. Cargar Compras desde Laravel
+
         async loadPurchases() {
             try {
                 const response = await axios.get('/user/orders');
@@ -608,7 +538,6 @@ export default {
             }
         },
 
-        // 2. Helpers Visuales
         formatDate(dateString) {
             if (!dateString) return '';
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -617,9 +546,9 @@ export default {
 
         getStatusClass(status) {
             switch (status) {
-                case 'paid': return 'bg-success';      // Verde
-                case 'pending': return 'bg-warning text-dark'; // Amarillo
-                case 'cancelled': return 'bg-danger';  // Rojo
+                case 'paid': return 'bg-success';
+                case 'pending': return 'bg-warning text-dark';
+                case 'cancelled': return 'bg-danger';
                 default: return 'bg-secondary';
             }
         },
@@ -634,27 +563,25 @@ export default {
         },
 
         getOrderImage(detail) {
-            // Intentamos sacar la imagen del snapshot guardado al comprar
+
             if (detail.product_snapshot && detail.product_snapshot.image) {
                 return detail.product_snapshot.image;
             }
-            // Fallback
+
             return '/images/default-image.png';
         },
         changeSection(sectionName) {
             this.activeSection = sectionName;
-            
-            // Actualiza la URL visualmente (ej: /user?section=pedidos)
+
             const newUrl = `${window.location.pathname}?section=${sectionName}`;
             window.history.pushState({ path: newUrl }, '', newUrl);
         },
-        // --- USUARIO ---
+
         loadUserData() {
             if (this.user) {
-                this.userForm = JSON.parse(JSON.stringify(this.user)); // Copia profunda
-                // Cargar direcciones iniciales si vienen en el user
+                this.userForm = JSON.parse(JSON.stringify(this.user));
                 if (this.user.addresses) this.userAddresses = this.user.addresses;
-                else this.loadUserAddresses(); // Si no, intentar cargarlas por API
+                else this.loadUserAddresses();
             }
         },
         cancelEditUser() {
@@ -673,7 +600,6 @@ export default {
             }
         },
 
-        // --- DIRECCIONES & UBIGEO ---
         loadDepartments() {
             this.departmentsList = ubigeoPeru.map(d => d.department);
         },
@@ -683,7 +609,7 @@ export default {
             this.provincesList = selected ? selected.provinces : [];
         },
         onProvinceChange() {
-            // Nada especial, el distrito es texto libre
+
         },
         async loadUserAddresses() {
             try {
@@ -697,8 +623,7 @@ export default {
         },
         editAddress(address) {
             this.editingAddress = address;
-            this.newAddress = { ...address }; // Copia
-            // Cargar provincias para el departamento de la dirección a editar
+            this.newAddress = { ...address };
             const selectedDept = ubigeoPeru.find(d => d.department === address.department);
             this.provincesList = selectedDept ? selectedDept.provinces : [];
 
@@ -744,7 +669,6 @@ export default {
             });
         },
 
-        // --- FAVORITOS ---
         loadFavorites() {
             const saved = localStorage.getItem('favorites');
             this.favorites = saved ? JSON.parse(saved) : [];
@@ -755,7 +679,6 @@ export default {
             window.dispatchEvent(new Event('favorites-updated'));
         },
 
-        // --- CUENTA ---
         async updatePassword() {
             if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
                 this.mostrarNotificacion('Error', 'Las contraseñas no coinciden', 'error');
@@ -770,14 +693,13 @@ export default {
             }
         },
 
-        // --- LOGOUT ---
         logout() {
             Swal.fire({
                 title: '¿Cerrar sesión?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Sí, salir', confirmButtonColor: '#000'
             }).then(async (res) => {
                 if (res.isConfirmed) {
                     await axios.post('/logout');
-                    localStorage.removeItem('favorites'); // Limpiar favoritos locales al salir
+                    localStorage.removeItem('favorites');
                     window.location.href = '/';
                 }
             });
@@ -788,19 +710,18 @@ export default {
         }
     },
     mounted() {
-        // [LÓGICA NUEVA] Detectar parámetro en la URL al cargar
+
         this.loadPurchases();
         const urlParams = new URLSearchParams(window.location.search);
         const sectionParam = urlParams.get('section');
 
-        // Si hay parámetro en URL lo usamos, si no, usamos el valor por defecto
         if (sectionParam) {
             this.activeSection = sectionParam;
         } else {
             this.activeSection = this.initialSection || 'datos';
         }
         this.loadUserData();
-        this.loadDepartments(); // Cargar ubigeo
+        this.loadDepartments();
         this.loadFavorites();
         if (!this.userAddresses.length) this.loadUserAddresses();
     }
@@ -808,18 +729,14 @@ export default {
 </script>
 
 <style scoped>
-/* =========================================
-   ESTILOS GENERALES (DISEÑO ORIGINAL)
-   ========================================= */
+
 .profile-container {
     padding-top: 140px;
-    /* Header fijo compensación */
     padding-bottom: 80px;
     min-height: 80vh;
     background-color: #fff;
 }
 
-/* Sidebar Menu */
 .list-group-item {
     border: 1px solid #ececec;
     padding: 1.2rem 1.25rem;
@@ -830,7 +747,6 @@ export default {
     transition: all 0.3s ease;
     border-radius: 0;
     margin-bottom: -1px;
-    /* Colapsar bordes dobles */
 }
 
 .list-group-item:hover {
@@ -845,10 +761,8 @@ export default {
     color: #fff;
 }
 
-/* Content Area */
 .content-area {
     padding-left: 4rem;
-    /* Padding original */
 }
 
 h2 {
@@ -858,7 +772,6 @@ h2 {
     color: #000;
 }
 
-/* Formularios */
 .form-label {
     font-weight: 500;
     color: #333;
@@ -881,7 +794,6 @@ h2 {
     outline: none;
 }
 
-/* Botones */
 .btn-primary {
     background-color: #fff;
     color: #000;
@@ -907,7 +819,6 @@ h2 {
     width: 100%;
 }
 
-/* Direcciones Cards */
 .address-card {
     padding: 5px 15px;
     border: 1px solid #e0e0e0;
@@ -924,7 +835,6 @@ h2 {
     font-weight: 600;
 }
 
-/* Icon rotation */
 .icon-rotate {
     transition: transform 0.3s ease;
 }
@@ -933,7 +843,6 @@ h2 {
     transform: rotate(180deg);
 }
 
-/* Animation */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
     transition: all 0.3s ease;
@@ -945,7 +854,6 @@ h2 {
     transform: translateY(-10px);
 }
 
-/* Buttons inside address card */
 .btn-outline-primary,
 .btn-outline-danger {
     border: none;
@@ -966,7 +874,6 @@ h2 {
     background: #f0f0f0;
 }
 
-/* Estilos para la sección de pedidos */
 .order-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -1000,12 +907,10 @@ h2 {
     padding: 0.5em 0.8em;
 }
 
-/* Colores de estado personalizados si Bootstrap no te convence */
-.bg-success { background-color: #198754 !important; } /* Verde Pagado */
-.bg-warning { background-color: #ffc107 !important; } /* Amarillo Pendiente */
-.bg-danger { background-color: #dc3545 !important; }  /* Rojo Cancelado */
+.bg-success { background-color: #198754 !important; }
+.bg-warning { background-color: #ffc107 !important; }
+.bg-danger { background-color: #dc3545 !important; }
 
-/* Responsive */
 @media (max-width: 991px) {
     .profile-container {
         padding-top: 120px;

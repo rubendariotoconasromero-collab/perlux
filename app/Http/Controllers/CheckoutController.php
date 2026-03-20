@@ -130,6 +130,7 @@ class CheckoutController extends Controller
                     'product_name' => $product->Name,
                     'product_snapshot' => [
                         'color' => $item['selectedVariant']['color']['ColorName'] ?? null,
+                        'ColorID' => $item['selectedVariant']['ColorID'] ?? null,
                         'size' => $item['selectedVariant']['size']['SizeName'] ?? null,
                         'image' => $item['Image'] ?? null
                     ]
@@ -158,15 +159,21 @@ class CheckoutController extends Controller
 
             DB::commit();
 
+            // Aseguramos obtener la llave (OJO: verifica que en tu archivo .env la variable exista exactamente con este nombre)
             $publicKey = env('CULQI_PUBLIC_KEY');
+            
+            // Si por alguna razón está vacío en el .env, te darás cuenta rápido en la consola de Vue.
+            if(empty($publicKey)) {
+                 \Illuminate\Support\Facades\Log::warning("CULQI_PUBLIC_KEY no está definida en el archivo .env");
+            }
             
             return response()->json([
                 'status' => 'success',
                 'order_id' => $order->OrderID,
                 'external_reference' => $externalReference,
                 'total_amount' => $totalAmount,
-                'culqi_public_key' => $publicKey ? $publicKey : 'pk_test_DEMO_MODE_NO_KEY',
-                'mode' => $publicKey ? 'live' : 'dev'
+                // Pasamos la llave directamente. 
+                'culqi_public_key' => $publicKey 
             ]);
 
         } catch (\Exception $e) {
