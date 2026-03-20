@@ -216,7 +216,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="detail in orderView.details" :key="detail.OrderDetailID">
+                                            <tr v-for="detail in orderView.order_details" :key="detail.OrderDetailID">
                                                 <td class="ps-3">
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar rounded me-3 bg-light d-flex align-items-center justify-content-center"
@@ -225,19 +225,17 @@
                                                                 style="object-fit: cover; width: 100%; height: 100%;">
                                                         </div>
                                                         <div class="d-flex flex-column">
-                                                            <span class="text-dark text-sm font-weight-bold">{{
-                                                                detail.product_name }}</span>
-                                                            <span class="text-xs text-secondary"
-                                                                v-if="detail.product_snapshot">
-                                                                {{ detail.product_snapshot.color }} / {{
-                                                                detail.product_snapshot.size }}
+                                                            <span class="text-dark text-sm font-weight-bold">
+                                                                {{ detail.product_name }}
+                                                            </span>
+                                                            <span class="text-xs text-secondary" v-if="detail.product_snapshot">
+                                                                {{ detail.product_snapshot.color }} / {{ detail.product_snapshot.size }}
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="text-center text-sm">{{ detail.quantity }}</td>
-                                                <td class="text-end text-sm font-weight-bold pe-3">S/ {{ detail.subtotal
-                                                    }}</td>
+                                                <td class="text-end text-sm font-weight-bold pe-3">S/ {{ detail.subtotal }}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot class="border-top">

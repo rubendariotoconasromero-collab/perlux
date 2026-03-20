@@ -35,7 +35,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.555);
   z-index: 9999;
   display: flex;
   justify-content: center;
@@ -59,5 +59,22 @@ export default {
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+.ui-blocker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.466); 
+  
+  /* CAMBIA ESTO AL NÚMERO MÁXIMO PERMITIDO */
+  z-index: 2147483647 !important; 
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px); 
 }
 </style>

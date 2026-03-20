@@ -226,6 +226,7 @@
 
 <script>
 import axios from 'axios';
+import ObjectHeader from '../shared/TheHeader/TheHeader.vue'; // Ajusta la ruta si difiere
 import TheHeader from '../shared/TheHeader/TheHeader.vue';
 import TheFooter from '../shared/TheFooter/TheFooter.vue';
 import Swal from 'sweetalert2';
@@ -331,51 +332,7 @@ export default {
       return true;
     },
 
-    async processOrder() {
-      this.errorMsg = '';
-      this.stockErrors = {};
-
-      if (!this.validateForm()) return;
-
-      this.processing = true;
-
-      try {
-        const itemsToSend = this.cart.map(item => {
-          return { ...item, Image: this.getProductImage(item) };
-        });
-
-        // 1. Guardar orden pendiente en Laravel
-        const response = await axios.post('/checkout/process', {
-          items: itemsToSend,
-          shipping_address: this.form,
-          payment_method: this.paymentMethod,
-          customer_phone: this.form.phone,
-          total_amount: this.totalAmount
-        });
-
-        const orderData = response.data;
-        this.currentOrderReference = orderData.external_reference;
-
-        // 2. Evaluar el método
-        if (this.paymentMethod === 'contraentrega') {
-          this.finishPurchase();
-        } else {
-          // Abrimos Culqi si es pago online
-          this.openCulqi(orderData);
-        }
-
-      } catch (error) {
-        console.error(error);
-        this.processing = false;
-
-        if (error.response && error.response.status === 422 && error.response.data.stock_errors) {
-          this.stockErrors = error.response.data.stock_errors;
-          this.errorMsg = "Algunos productos ya no tienen stock disponible. Revisa tu carrito.";
-        } else {
-          this.errorMsg = error.response?.data?.error || "Ocurrió un error inesperado al procesar tu orden.";
-        }
-      }
-    },
+    
 
     openCulqi(orderData) {
       // Validamos que haya llave pública
@@ -402,46 +359,152 @@ export default {
             tarjeta: true,
             yape: true,
             billetera: true
-          }
+          },
         });
 
-        // Abrir Modal
+        // Abrir Modal de Culqi
         window.Culqi.open();
       } else {
-        this.errorMsg = "El sistema de pagos no ha cargado correctamente. Refresca la página.";
+        Swal.fire('Atención', 'El sistema de pagos no ha cargado correctamente. Refresca la página.', 'warning');
         this.processing = false;
+      }
+    },
+
+    async processOrder() {
+      this.errorMsg = '';
+      this.stockErrors = {}; 
+
+      if (!this.validateForm()) return;
+
+      this.processing = true;
+
+      try {
+        const itemsToSend = this.cart.map(item => {
+          return { ...item, Image: this.getProductImage(item) };
+        });
+
+        // 1. Guardar orden pendiente en Laravel
+        const response = await axios.post('/checkout/process', {
+          items: itemsToSend,
+          shipping_address: this.form,
+          payment_method: this.paymentMethod,
+          customer_phone: this.form.phone,
+          total_amount: this.totalAmount
+        });
+
+        // VALIDACIÓN EXTRA: Si Laravel responde "éxito" pero manda un error en el JSON
+        if (response.data && response.data.error) {
+          this.processing = false;
+          this.errorMsg = response.data.error;
+          Swal.fire({ icon: 'error', title: 'Aviso', text: response.data.error, confirmButtonColor: '#000' });
+          return; // Detenemos el proceso
+        }
+
+        const orderData = response.data;
+        this.currentOrderReference = orderData.external_reference;
+
+        // 2. Evaluar el método
+        if (this.paymentMethod === 'contraentrega') {
+          this.finishPurchase();
+        } else {
+          this.openCulqi(orderData);
+        }
+
+      } catch (error) {
+        console.error(error);
+        this.processing = false;
+
+        if (error.response && error.response.status === 422 && error.response.data.stock_errors) {
+          this.stockErrors = error.response.data.stock_errors;
+          this.errorMsg = "Algunos productos ya no tienen stock disponible. Revisa tu carrito.";
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          const backendError = error.response?.data?.error || "Ocurrió un error inesperado al procesar tu orden.";
+          this.errorMsg = backendError;
+          Swal.fire({ icon: 'error', title: 'Problema con la orden', text: backendError, confirmButtonColor: '#000' });
+        }
       }
     },
 
     async culqiCallback() {
       if (window.Culqi.token) {
-        // Tenemos el token de la tarjeta/yape
         const token = window.Culqi.token.id;
         const email = window.Culqi.token.email || (this.user ? this.user.email : 'cliente@perlux.com');
-
+        
         try {
-          // Avisamos a Laravel para que realice el cargo
-          await axios.post('/checkout/confirm-payment', {
+          const response = await axios.post('/checkout/confirm-payment', {
             token: token,
             order_number: this.currentOrderReference,
             email: email,
             amount: Math.round(parseFloat(this.totalAmount) * 100)
           });
 
+          // Si el banco rebotó la tarjeta
+          if (response.data && (response.data.error || response.data.success === false)) {
+             // 1. Cerramos Culqi inmediatamente
+             if (window.Culqi) window.Culqi.close();
+             this.processing = false;
+             
+             const bankError = response.data.error || response.data.message || "Pago denegado por el banco.";
+             this.errorMsg = bankError;
+             
+             // 2. RETRASAMOS EL SWEETALERT MEDIO SEGUNDO
+             // Esto asegura que el iframe de Culqi ya no exista en el DOM
+             setTimeout(() => {
+                 Swal.fire({
+                    icon: 'error',
+                    title: 'Pago Denegado',
+                    text: bankError,
+                    confirmButtonColor: '#000',
+                    confirmButtonText: 'Entendido'
+                 });
+             }, 500);
+             
+             return; 
+          }
+          
           this.finishPurchase();
 
         } catch (error) {
           console.error(error);
-          this.errorMsg = error.response?.data?.message || "Pago autorizado por el banco, pero hubo un error al registrarlo.";
+          if (window.Culqi) window.Culqi.close();
           this.processing = false;
+          
+          const bankError = error.response?.data?.error || error.response?.data?.message || "Pago autorizado por el banco, pero hubo un error al registrarlo.";
+          this.errorMsg = bankError;
+          
+          // RETRASAMOS EL SWEETALERT MEDIO SEGUNDO
+          setTimeout(() => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Pago Denegado',
+                text: bankError,
+                confirmButtonColor: '#000',
+                confirmButtonText: 'Entendido'
+              });
+          }, 500);
+          
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       } else if (window.Culqi.error) {
-        // Tarjeta sin fondos, cerrada por el usuario, etc.
-        this.errorMsg = window.Culqi.error.user_message;
+        if (window.Culqi) window.Culqi.close();
         this.processing = false;
+        
+        const culqiError = window.Culqi.error.user_message;
+        this.errorMsg = culqiError;
+
+        if (window.Culqi.error.type !== 'checkout_closed') { 
+            setTimeout(() => {
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'Atención',
+                  text: culqiError,
+                  confirmButtonColor: '#000'
+                });
+            }, 500);
+        }
       } else {
-        // En caso de que se cierre el modal sin acción
+        if (window.Culqi) window.Culqi.close();
         this.processing = false;
       }
     },
@@ -458,8 +521,10 @@ export default {
         this.finishPurchase();
       } catch (e) {
         console.error(e);
-        this.errorMsg = "Error en simulación";
+        const simError = e.response?.data?.error || "Error en simulación";
+        this.errorMsg = simError;
         this.processing = false;
+        Swal.fire('Error', simError, 'error');
       }
     },
 
@@ -473,9 +538,10 @@ export default {
 </script>
 
 <style scoped>
-/* =========================================
-   DISEÑO PREMIUM CHECKOUT
-   ========================================= */
+.swal-top-layer {
+  z-index: 2147483647 !important; 
+}
+
 .bg-light-custom {
   background-color: #fcfcfc;
 }

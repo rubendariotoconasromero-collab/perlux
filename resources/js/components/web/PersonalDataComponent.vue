@@ -269,7 +269,7 @@
                         </div>
 
                        
-                        <div v-else class="orders-list">
+                        <!-- <div v-else class="orders-list">
                             <div v-for="order in purchases" :key="order.OrderID" class="card border-0 shadow-sm mb-3">
                                 <div class="card-body p-3">
                                     <div class="row align-items-center">
@@ -297,6 +297,54 @@
                                             </button>
                                             <button class="btn btn-outline-dark btn-sm w-100" @click="buyAgain(order)">
                                                 Compra de nuevo
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div v-else class="orders-list">
+                            <div v-for="order in purchases" :key="order.OrderID" class="card border-0 shadow-sm mb-3 order-card">
+                                <div class="card-body p-3">
+                                    <div class="row align-items-center g-3">
+                                        
+                                        <div class="col-auto">
+                                            <div class="bg-light rounded overflow-hidden d-flex align-items-center justify-content-center" style="height: 70px; width: 70px;">
+                                                <img :src="getOrderThumbnail(order)" class="img-fluid" style="height:100%; width:100%; object-fit:cover;">
+                                            </div>
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <h6 class="mb-0 fw-bold text-dark text-truncate">Pedido {{ order.external_reference }}</h6>
+                                                <span class="d-md-none fw-bold ms-2 text-dark">S/ {{ order.total_amount }}</span>
+                                            </div>
+                                            
+                                            <p class="text-muted small mb-2">
+                                                <i class="far fa-calendar-alt me-1"></i> {{ formatDate(order.created_at) }}
+                                            </p>
+                                            
+                                            <div>
+                                                <span class="badge rounded-pill px-3 py-1 fw-normal" 
+                                                    :class="order.payment_status === 'paid' ? 'bg-success-light text-success' : 'bg-warning-light text-warning'"
+                                                    style="font-size: 0.75rem;">
+                                                    <i class="fas me-1" :class="order.payment_status === 'paid' ? 'fa-check-circle' : 'fa-clock'"></i>
+                                                    {{ order.payment_status === 'paid' ? 'Pagado' : 'Pendiente de Pago' }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 d-none d-md-block text-end">
+                                            <h5 class="fw-bold m-0 text-dark">S/ {{ order.total_amount }}</h5>
+                                        </div>
+
+                                        <div class="col-12 col-md-auto d-flex flex-row flex-md-column gap-2 justify-content-end mt-2 mt-md-0">
+                                            <button class="btn btn-dark btn-sm flex-fill px-3" @click="openOrderDetail(order)">
+                                                Ver Detalle
+                                            </button>
+                                            <button class="btn btn-outline-dark btn-sm flex-fill px-3" @click="buyAgain(order)">
+                                                Comprar de nuevo
                                             </button>
                                         </div>
 
@@ -925,5 +973,28 @@ h2 {
         padding-left: 15px;
         padding-right: 15px;
     }
+}
+
+
+/* Efecto hover sutil para la tarjeta */
+.order-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #f0f0f0 !important;
+}
+.order-card:hover {
+    /* transform: translateY(-2px); */
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.05) !important;
+}
+
+/* Colores suaves para los badges de estado */
+.bg-success-light {
+    background-color: #e8f5e9;
+    color: #2e7d32 !important;
+    border: 1px solid #c8e6c9;
+}
+.bg-warning-light {
+    background-color: #fff8e1;
+    color: #f57f17 !important;
+    border: 1px solid #ffecb3;
 }
 </style>
