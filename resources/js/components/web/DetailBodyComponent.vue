@@ -55,6 +55,30 @@
               </div>
             </div>
 
+            <!-- <div class="size-section mb-4">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <div class="section-title mb-0">Tallas</div>
+                <div class="size-guide" @click="showSizeGuide">Guía de tallas</div>
+              </div>
+              
+              <div class="size-selector">
+                <div v-if="!selectedColor" class="alert-light-custom text-muted">
+                  <i class="fas fa-arrow-up me-2"></i> Selecciona un color para ver las tallas.
+                </div>
+
+                <div v-else class="d-flex flex-wrap gap-2">
+                  <button v-for="sizeId in getAvailableSizesForSelectedColor()" :key="sizeId"
+                    class="btn btn-size-select"
+                    :class="{ 'active': selectedSize == sizeId }" @click="selectSize(sizeId)">
+                    {{ getSizeName(sizeId) }}
+                  </button>
+                </div>
+
+                <small v-if="selectedColor && getAvailableSizesForSelectedColor().length === 0" class="text-danger mt-2 d-block">
+                  No hay tallas disponibles para este color.
+                </small>
+              </div>
+            </div> -->
             <div class="size-section mb-4">
               <div class="d-flex justify-content-between align-items-end mb-2">
                 <div class="section-title mb-0">Tallas</div>
@@ -72,6 +96,10 @@
                     :class="{ 'active': selectedSize == sizeId }" @click="selectSize(sizeId)">
                     {{ getSizeName(sizeId) }}
                   </button>
+                </div>
+
+                <div v-if="selectedColor && !selectedSize && getAvailableSizesForSelectedColor().length > 0" class="alert-light-custom text-muted mt-1">
+                  <i class="fas fa-hand-pointer me-1"></i> Ahora, selecciona tu talla para continuar.
                 </div>
 
                 <small v-if="selectedColor && getAvailableSizesForSelectedColor().length === 0" class="text-danger mt-2 d-block">
@@ -691,9 +719,9 @@ export default {
 .color-option.active { transform: scale(1.1); box-shadow: 0 0 0 2px #fff, 0 0 0 3px #969696; border-color: transparent; }
 
 .size-guide { font-size: 0.8rem; text-decoration: underline; cursor: pointer; color: #666; font-weight: 600; }
-.btn-size-select { border: 1px solid #7a7a7a; background: #fff; color: #7a7a7a; min-width: 50px; height: 45px; font-weight: 600; border-radius: 0; transition: all 0.2s ease; }
-.btn-size-select:hover { border-color: #969696; color: #333; }
-.btn-size-select.active { background: #969696; color: #fff; border-color: #969696; }
+.btn-size-select { border: 1px solid #7a7a7a; background: #fff; color: #7a7a7a; min-width: 50px; height: 45px; font-weight: 600; border-radius: 4px; transition: all 0.2s ease; }
+.btn-size-select:hover { border-color: #000; }
+.btn-size-select.active { background: #000; color: #fff; border-color: #000; }
 
 .alert-light-custom { background: #f8f9fa; padding: 10px 15px; border-radius: 4px; font-size: 0.85rem; border: 1px solid #eee; }
 
@@ -702,12 +730,12 @@ export default {
 .quantity-selector input { font-weight: bold; pointer-events: none; }
 
 .add-to-cart-btn {
-  background: #969696; color: #fff; border: none; padding: 14px;
+  background: #000; color: #fff; border: 1px solid #000; padding: 14px;
   font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-  border-radius: 0; transition: all 0.1s;
+  border-radius: 0; transition: all 0.3s;
 }
-.add-to-cart-btn:not(.disabled-btn):hover { background: #7a7a7a; color: #fff; }
-.disabled-btn { background: #ccc !important; cursor: not-allowed; }
+.add-to-cart-btn:not(.disabled-btn):hover { background: #333; color: #fff; }
+.disabled-btn { background: #ccc !important; border-color: #ccc !important; cursor: not-allowed; }
 
 .btn-whatsapp {
   background-color: #ffffff; color: #2b8d4f; border: 2px solid #2b8d4f;

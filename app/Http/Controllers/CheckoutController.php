@@ -10,6 +10,8 @@ use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmationMail;
 
 class CheckoutController extends Controller
 {
@@ -159,6 +161,14 @@ class CheckoutController extends Controller
 
             DB::commit();
 
+            if ($request->payment_method === 'contraentrega') {
+                try {
+                    Mail::to($order->customer_email)->send(new OrderConfirmationMail($order));
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Error enviando correo de contraentrega: " . $e->getMessage());
+                }
+            }
+
             // Aseguramos obtener la llave (OJO: verifica que en tu archivo .env la variable exista exactamente con este nombre)
             $publicKey = env('CULQI_PUBLIC_KEY');
             
@@ -232,6 +242,11 @@ class CheckoutController extends Controller
                 $order->payment_id = $jsonResponse->id;
                 $order->payer_info = $jsonResponse->source;
                 $order->save();
+                try {
+                    Mail::to($order->customer_email)->send(new OrderConfirmationMail($order));
+                } catch (\Exception $e) {
+                    Log::error("Error enviando correo tras pago Culqi: " . $e->getMessage());
+                }
                 return response()->json(['status' => 'paid']);
             } else {
                 // Pago Rechazado Real

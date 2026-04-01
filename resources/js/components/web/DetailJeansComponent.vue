@@ -55,6 +55,31 @@
               </div>
             </div>
 
+            <!-- <div class="size-section mb-4">
+              <div class="d-flex justify-content-between align-items-end mb-2">
+                <div class="section-title mb-0">Tallas</div>
+                <div class="size-guide" @click="showSizeGuide">Guía de tallas</div>
+              </div>
+              
+              <div class="size-selector">
+                <div v-if="!selectedColor" class="alert-light-custom text-muted">
+                  <i class="fas fa-arrow-up me-2"></i> Selecciona un color para ver las tallas.
+                </div>
+
+                <div v-else class="d-flex flex-wrap gap-2">
+                  <button v-for="sizeId in getAvailableSizesForSelectedColor()" :key="sizeId"
+                    class="btn btn-size-select"
+                    :class="{ 'active': selectedSize == sizeId }" @click="selectSize(sizeId)">
+                    {{ getSizeName(sizeId) }}
+                  </button>
+                </div>
+
+                <small v-if="selectedColor && getAvailableSizesForSelectedColor().length === 0" class="text-danger mt-2 d-block">
+                  No hay tallas disponibles para este color.
+                </small>
+              </div>
+            </div> -->
+
             <div class="size-section mb-4">
               <div class="d-flex justify-content-between align-items-end mb-2">
                 <div class="section-title mb-0">Tallas</div>
@@ -72,6 +97,10 @@
                     :class="{ 'active': selectedSize == sizeId }" @click="selectSize(sizeId)">
                     {{ getSizeName(sizeId) }}
                   </button>
+                </div>
+
+                <div v-if="selectedColor && !selectedSize && getAvailableSizesForSelectedColor().length > 0" class="alert-light-custom text-muted mt-1">
+                  <i class="fas fa-hand-pointer me-1"></i> Ahora, selecciona tu talla para continuar.
                 </div>
 
                 <small v-if="selectedColor && getAvailableSizesForSelectedColor().length === 0" class="text-danger mt-2 d-block">
