@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
+use App\Models\ProductCertificate;
+use App\Models\OrderDetail;
 
 class AdminOrderController extends Controller
 {
@@ -17,7 +19,8 @@ class AdminOrderController extends Controller
     {
         // Iniciamos la consulta cargando los detalles para el modal
         // y ordenando por el más reciente
-        $query = Order::with('orderDetails')->orderBy('created_at', 'desc');
+        $query = Order::with('orderDetails.certificates')
+        ->orderBy('created_at', 'desc');
 
         // 1. Filtro de Búsqueda (Texto)
         if ($request->has('search') && !empty($request->search)) {
@@ -104,4 +107,33 @@ class AdminOrderController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
+    public function syncCertificates(Request $request, $orderDetailId)
+    {
+        $request->validate([
+            'codes' => 'array'
+        ]);
+
+        $detail = OrderDetail::findOrFail($orderDetailId);
+
+        ProductCertificate::where('order_detail_id', $orderDetailId)->delete();
+
+        $savedCertificates = [];
+        if ($request->codes) {
+            foreach ($request->codes as $code) {
+                if (!empty(trim($code))) {
+                    $savedCertificates[] = ProductCertificate::create([
+                        'order_detail_id' => $orderDetailId,
+                        'code' => trim($code)
+                    ]);
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'certificates' => $savedCertificates
+        ]);
+    }
+    
 }

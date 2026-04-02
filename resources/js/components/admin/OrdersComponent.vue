@@ -202,7 +202,7 @@
                             </div>
                             <div class="card-body p-4">
                                 <div class="table-responsive">
-                                    <table class="table align-middle mb-0">
+                                    <!-- <table class="table align-middle mb-0">
                                         <thead class="bg-light">
                                             <tr>
                                                 <th class="text-secondary text-xs font-weight-bolder opacity-7 ps-3">
@@ -260,6 +260,72 @@
                                                         orderView.total_amount }}</span></td>
                                             </tr>
                                         </tfoot>
+                                    </table> -->
+                                    <table class="table align-middle mb-0">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="text-secondary text-xs font-weight-bolder opacity-7 ps-3">Producto</th>
+                                                <th class="text-center text-secondary text-xs font-weight-bolder opacity-7">Cant.</th>
+                                                <th class="text-center text-secondary text-xs font-weight-bolder opacity-7">Códigos / Certificados</th>
+                                                <th class="text-end text-secondary text-xs font-weight-bolder opacity-7 pe-3">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="detail in orderView.order_details" :key="detail.OrderDetailID">
+                                                <td class="ps-3">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar rounded me-3 bg-light d-flex align-items-center justify-content-center"
+                                                            style="width: 48px; height: 48px; overflow: hidden;">
+                                                            <img :src="getImage(detail)" class="img-fluid"
+                                                                style="object-fit: cover; width: 100%; height: 100%;">
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                            <span class="text-dark text-sm font-weight-bold">
+                                                                {{ detail.product_name }}
+                                                            </span>
+                                                            <span class="text-xs text-secondary" v-if="detail.product_snapshot">
+                                                                {{ detail.product_snapshot.color }} / {{ detail.product_snapshot.size }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center text-sm">{{ detail.quantity }}</td>
+                                                
+                                                <td class="text-center">
+                                                    <button v-if="detail.certificates && detail.certificates.length > 0" 
+                                                            class="btn btn-sm rounded-pill px-3" style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;"
+                                                            @click="openCertModal(detail)">
+                                                        <i class="fas fa-check-circle me-1"></i> Ver/Editar Códigos
+                                                    </button>
+
+                                                    <button v-else-if="orderView.payment_status === 'paid'" 
+                                                            class="btn btn-sm btn-outline-dark rounded-pill px-3" 
+                                                            @click="openCertModal(detail)">
+                                                        <i class="fas fa-barcode me-1"></i> Asignar Códigos
+                                                    </button>
+
+                                                    <span v-else class="text-muted" style="font-size: 0.75rem;">
+                                                        <i class="fas fa-lock me-1"></i> Requiere pago
+                                                    </span>
+                                                </td>
+                                                
+                                                <td class="text-end text-sm font-weight-bold pe-3">S/ {{ detail.subtotal }}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot class="border-top">
+                                            <tr>
+                                                <td colspan="3" class="text-end pt-4"><span class="text-secondary text-sm">Subtotal:</span></td>
+                                                <td class="text-end pt-4 pe-3"><span class="text-dark font-weight-bold">S/ {{ orderView.total_amount }}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" class="text-end border-0"><span class="text-secondary text-sm">Envío:</span></td>
+                                                <td class="text-end border-0 pe-3"><span class="text-primary text-sm fw-bold">Gratis</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" class="text-end border-0 pt-3"><span class="text-dark h6 font-weight-bold">Total General:</span></td>
+                                                <td class="text-end border-0 pt-3 pe-3"><span class="text-primary-skinly h5 font-weight-bold">S/ {{ orderView.total_amount }}</span></td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -268,7 +334,67 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="modal fade" id="modalCertificados" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h5 class="modal-title fw-bold text-dark">Certificados de Autenticidad</h5>
+            <button type="button" class="btn-close" @click="closeCertModal"></button>
+          </div>
+          <div class="modal-body p-4">
+            
+            <div v-if="currentDetailForCert" class="d-flex align-items-center bg-light border p-3 rounded-3 mb-4 shadow-sm">
+                
+                <div class="me-3 border" style="width: 70px; height: 70px; border-radius: 8px; overflow: hidden; background: #fff; flex-shrink: 0;">
+                    <img :src="getImage(currentDetailForCert)" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Producto">
+                </div>
+
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-1 text-dark">{{ currentDetailForCert.product_name }}</h6>
+                    
+                    <div class="text-secondary small mb-2" v-if="currentDetailForCert.product_snapshot">
+                        <span class="me-3" title="Color">
+                            <i class="fas fa-palette text-muted me-1"></i> {{ currentDetailForCert.product_snapshot.color || 'N/A' }}
+                        </span>
+                        <span title="Talla">
+                            <i class="fas fa-ruler text-muted me-1"></i> {{ currentDetailForCert.product_snapshot.size || 'N/A' }}
+                        </span>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <span class="text-dark small fw-bold me-2">Cantidad a certificar:</span>
+                        <span class="badge bg-dark px-2 py-1" style="font-size: 0.8rem;">
+                            {{ currentDetailForCert.quantity }} {{ currentDetailForCert.quantity > 1 ? 'unidades' : 'unidad' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="certificates-list">
+                <div v-for="(code, index) in certificateCodes" :key="index" class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Código para el Ítem #{{ index + 1 }}</label>
+                    <div class="input-group shadow-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-barcode text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0 ps-0" 
+                               v-model="certificateCodes[index]" 
+                               placeholder="Ej: PRX-9823749823"
+                               style="font-family: monospace; font-size: 1rem; letter-spacing: 1px;">
+                    </div>
+                </div>
+            </div>
+
+          </div>
+          <div class="modal-footer border-top-0 pt-0 px-4 pb-4">
+            <button type="button" class="btn btn-light px-4 rounded-pill" @click="closeCertModal">Cancelar</button>
+            <button type="button" class="btn btn-dark px-4 rounded-pill" @click="saveCerts" :disabled="isSavingCerts">
+              <span v-if="isSavingCerts" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isSavingCerts ? 'Guardando...' : 'Guardar Códigos' }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -296,12 +422,66 @@ export default {
             from: 0,
             to: 0,
             total: 0,
+
+            currentDetailForCert: null,
+            certificateCodes: [],
+            isSavingCerts: false,
         };
     },
     async mounted() {
         await this.getOrders();
     },
     methods: {
+        openCertModal(detail) {
+            this.currentDetailForCert = detail;
+            this.certificateCodes = [];
+            
+            // Si el detalle ya tiene certificados guardados, los usamos.
+            // Si no, iniciamos con arrays vacíos.
+            let existingCerts = detail.certificates || [];
+            
+            // Creamos un input por cada unidad comprada (detail.quantity)
+            for (let i = 0; i < detail.quantity; i++) {
+                if (existingCerts[i]) {
+                    this.certificateCodes.push(existingCerts[i].code);
+                } else {
+                    this.certificateCodes.push(''); // Input vacío
+                }
+            }
+            
+            $('#modalCertificados').modal('show');
+        },
+
+        closeCertModal() {
+            $('#modalCertificados').modal('hide');
+            setTimeout(() => {
+                this.currentDetailForCert = null;
+                this.certificateCodes = [];
+            }, 300);
+        },
+
+        async saveCerts() {
+            this.isSavingCerts = true;
+            try {
+                // Hacemos el POST a la nueva ruta
+                const response = await axios.post(`/admin/order-details/${this.currentDetailForCert.OrderDetailID}/certificates`, {
+                    codes: this.certificateCodes
+                });
+
+                if (response.data.status === 'success') {
+                    // Actualizamos el estado local para que el botón cambie a "Ver/Editar Códigos"
+                    this.currentDetailForCert.certificates = response.data.certificates;
+                    
+                    this.mostrarNotificacion('Éxito', 'Códigos de autenticidad guardados.', 'success');
+                    this.closeCertModal();
+                }
+            } catch (error) {
+                console.error("Error guardando certificados:", error);
+                this.mostrarNotificacion('Error', 'No se pudieron guardar los códigos', 'error');
+            } finally {
+                this.isSavingCerts = false;
+            }
+        },
         // --- API & DATA ---
         async getOrders() {
             this.cargando = true;

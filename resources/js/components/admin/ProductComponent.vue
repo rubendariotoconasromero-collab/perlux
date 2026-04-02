@@ -276,7 +276,7 @@
                                             <th class="fw-bold" style="width: 15%">Stock</th>
                                             <th class="fw-bold" style="width: 15%">Precio (Opcional)</th>
                                             <th class="fw-bold" style="width: 20%">SKU</th>
-                                            <th class="text-center" style="width: 10%"><i class="fas fa-cog"></i></th>
+                                            <th class="text-start" style="width: 10%"><i class="fas fa-cog"></i></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -314,7 +314,7 @@
                                             </td>
                                             <td class="text-center">
                                                 <button type="button"
-                                                    class="btn btn-icon btn-white text-danger btn-sm shadow-none border-0"
+                                                    class="btn btn-icon btn-light text-danger btn-sm shadow-none border-0"
                                                     @click="removeVariant(index)"
                                                     :disabled="product.Variants.length <= 1">
                                                     <i class="fas fa-trash"></i>
@@ -677,11 +677,43 @@ export default {
                 SKU: ''
             });
         },
+        
         removeVariant(index) {
-            if (this.product.Variants.length > 1) {
-                this.product.Variants.splice(index, 1);
+
+            if (this.product.Variants.length <= 1) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No permitido',
+                    text: 'El producto debe tener al menos una variante.',
+                    confirmButtonColor: '#000'
+                });
+                return;
             }
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta variante será eliminada de la lista.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#000', 
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.product.Variants.splice(index, 1);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Variante eliminada',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
+            });
         },
+
         addDetail() {
             this.product.Details.push({ DetailName: '', DetailValue: '' });
         },

@@ -47,4 +47,9 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Size::class, 'SizeID', 'SizeID');
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(ProductCertificate::class, 'order_detail_id', 'OrderDetailID');
+    }
 }

@@ -188,6 +188,8 @@ Route::middleware(['isLoggedIn'])->group(function () {
     Route::get('/thank-you', [CheckoutController::class, 'viewThankYou']);
 
     Route::get('/user/orders', [OrderController::class, 'getUserOrders']);
+
+    Route::post('/admin/order-details/{id}/certificates', [AdminOrderController::class, 'syncCertificates']);
 });
 
 Route::get('/pasarela', [MercadoPagoController::class, 'indexPasarela']);
@@ -241,3 +243,5 @@ Route::prefix('mercadopago')->group(function () {
 
 Route::get('/test-mercadopago-connection', [MercadoPagoController::class, 'testConnection']);
 Route::post('/mercadopago/debug', [MercadoPagoController::class, 'debugRequest']);
+
+Route::post('/verify-certificate', [OrderController::class, 'verifyCertificate']);

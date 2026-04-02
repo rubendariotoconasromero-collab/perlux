@@ -229,12 +229,66 @@
             <p>PERLUX se reserva el derecho de modificar esta Política de Privacidad. Cualquier cambio será comunicado a través de nuestros canales oficiales.</p>
           </div>
 
-          <div v-if="activeSection === 'certificado'" class="info-section fade-in">
+          <!-- <div v-if="activeSection === 'certificado'" class="info-section fade-in">
             <h2 class="section-title">Certificado de Autenticidad</h2>
             <p>Todos los productos PERLUX son elaborados con cuero genuino y materiales de alta calidad, garantizando la autenticidad y el lujo peruano...</p>
             <div class="text-center mt-4">
                 <i class="fas fa-award fa-5x text-warning mb-3"></i>
                 <p>Garantía de Calidad PERLUX</p>
+            </div>
+          </div> -->
+
+          <div v-if="activeSection === 'certificado'" class="info-section fade-in">
+            <h2 class="section-title">Verificación de Autenticidad</h2>
+            <p class="lead text-muted mb-4">
+              Todos los productos PERLUX son elaborados con cuero genuino y materiales de alta calidad. Ingresa el código de tu certificado para verificar la autenticidad de tu compra.
+            </p>
+
+            <div class="card border-0 bg-light p-4 mb-4">
+              <h5 class="fw-bold mb-3 text-dark"><i class="fas fa-search me-2"></i>Ingresa tu Código</h5>
+              <div class="input-group mb-2 shadow-sm">
+                <input type="text" class="form-control form-control-lg border-0" 
+                       placeholder="Ej: PRX-12345678" 
+                       v-model="certificateCode" 
+                       @keyup.enter="verifyCode"
+                       style="font-family: monospace; letter-spacing: 1px;">
+                <button class="btn btn-dark px-4 fw-bold" type="button" @click="verifyCode" :disabled="verificationStatus === 'loading' || !certificateCode">
+                  <span v-if="verificationStatus === 'loading'" class="spinner-border spinner-border-sm me-2"></span>
+                  VERIFICAR
+                </button>
+              </div>
+              <small class="text-muted"><i class="fas fa-info-circle me-1"></i>Encontrarás el código en la tarjeta física de autenticidad que recibiste con tu producto.</small>
+            </div>
+
+            <div v-if="verificationStatus === 'success'" class="alert alert-success border border-success mt-4 fade-in p-4 bg-white shadow-sm">
+              <div class="text-center mb-3">
+                <i class="fas fa-check-circle fa-3x text-success mb-2"></i>
+                <h4 class="fw-bold text-dark mb-0">¡Producto 100% Original!</h4>
+                <p class="text-success mb-0">{{ verificationMessage }}</p>
+              </div>
+              <hr class="text-success">
+              
+              <div class="d-flex align-items-center mt-3 justify-content-center" v-if="verificationResult">
+                <div class="me-4 bg-light p-1 rounded border" style="width: 90px; height: 90px; flex-shrink:0;" v-if="getVerifiedImage()">
+                  <img :src="getVerifiedImage()" class="img-fluid w-100 h-100 rounded" style="object-fit: cover;">
+                </div>
+                <div class="text-start">
+                  <h5 class="fw-bold text-dark mb-1">{{ verificationResult.product_name }}</h5>
+                  <p class="mb-1 text-secondary"><strong><i class="fas fa-barcode me-1"></i>Código:</strong> <span style="font-family: monospace;">{{ verificationResult.code }}</span></p>
+                  <p class="mb-0 text-secondary"><strong><i class="far fa-calendar-check me-1"></i>Registrado el:</strong> {{ verificationResult.date }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="verificationStatus === 'error'" class="alert alert-danger border-danger mt-4 fade-in p-4 bg-white shadow-sm text-center">
+              <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+              <h5 class="fw-bold text-dark">Código no encontrado</h5>
+              <p class="text-danger mb-0">{{ verificationMessage }}</p>
+            </div>
+
+            <div class="text-center mt-5" v-if="verificationStatus !== 'success'">
+                <i class="fas fa-award fa-4x text-warning mb-3 opacity-50"></i>
+                <p class="fw-bold text-muted text-uppercase tracking-wide">Garantía de Calidad PERLUX</p>
             </div>
           </div>
 
@@ -247,6 +301,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import TheHeader from '../shared/TheHeader/TheHeader.vue';
 import TheFooter from '../shared/TheFooter/TheFooter.vue';
 
@@ -261,9 +316,57 @@ export default {
   },
   data() {
     return {
-      activeSection: 'envios' // Sección por defecto
+      activeSection: 'envios', // Sección por defecto
+      certificateCode: '',
+      verificationStatus: null, // Puede ser: null, 'loading', 'success', 'error'
+      verificationMessage: '',
+      verificationResult: null,
     };
   },
+  methods:{
+    async verifyCode() {
+        if (!this.certificateCode.trim()) return;
+        
+        // Reiniciamos estados visuales
+        this.verificationStatus = 'loading';
+        this.verificationResult = null;
+        this.verificationMessage = '';
+
+        try {
+            // Asegúrate de que la ruta coincida con la que pusiste en web.php
+            const response = await axios.post('/verify-certificate', {
+                code: this.certificateCode.trim()
+            });
+            
+            // Si Laravel responde con success
+            this.verificationStatus = 'success';
+            this.verificationMessage = response.data.message;
+            this.verificationResult = response.data.data;
+            
+        } catch (error) {
+            // Si Laravel responde con el error 404
+            this.verificationStatus = 'error';
+            this.verificationMessage = error.response?.data?.message || 'Ocurrió un error de conexión al consultar el código.';
+        }
+    },
+
+    // Reutilizamos tu lógica de imágenes para la foto de verificación
+    getVerifiedImage() {
+        if (!this.verificationResult || !this.verificationResult.snapshot) return null;
+        
+        let snapshot = this.verificationResult.snapshot;
+        if (typeof snapshot === 'string') {
+            try { snapshot = JSON.parse(snapshot); } catch (e) {}
+        }
+        
+        if (snapshot && snapshot.image) {
+            let img = snapshot.image;
+            if (!img.startsWith('/') && !img.startsWith('http')) img = '/' + img;
+            return img;
+        }
+        return null;
+    }
+  },  
   mounted() {
     // Detectar parámetro URL para abrir la sección correcta
     // Ejemplo: /informacion?seccion=cambios
