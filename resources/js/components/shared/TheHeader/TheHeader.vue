@@ -50,7 +50,7 @@
                 <a class="nav-link" href="/">Inicio</a>
               </li>
               
-              <li class="nav-item dropdown position-relative" @mouseenter="showDropdown('bodys')" @mouseleave="hideDropdown('bodys')">
+              <li class="nav-item dropdown position-static" @mouseenter="showDropdown('bodys')" @mouseleave="hideDropdown('bodys')">
                 <div class="d-flex align-items-center justify-content-between w-100">
                   <a class="nav-link" href="/glam" :class="{ active: activeDropdown === 'bodys' }">Glam</a>
                 </div>
@@ -88,7 +88,7 @@
                 </div>
               </li>
 
-              <li class="nav-item dropdown position-relative" @mouseenter="showDropdown('jeans')" @mouseleave="hideDropdown('jeans')">
+              <li class="nav-item dropdown position-static" @mouseenter="showDropdown('jeans')" @mouseleave="hideDropdown('jeans')">
                 <div class="d-flex align-items-center justify-content-between w-100">
                   <a class="nav-link" href="/novias" :class="{ active: activeDropdown === 'jeans' }">Novias</a>
                 </div>
@@ -513,9 +513,10 @@ export default {
 .dropdown-menu.collections-dropdown {
   position: absolute;
   top: 100%;
-  left: 0;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  left: -10%;   /* Ajusta para centrar el dropdown respecto al enlace */
+  right: 0;       /* Ancla al borde derecho */
+  width: 120%;    /* Ocupa el 100% exacto de la pantalla */
+  margin: 0;      /* Quitamos el margin-left que tenías */
   border: none;
   border-top: 1px solid #f5f5f5;
   background: white;

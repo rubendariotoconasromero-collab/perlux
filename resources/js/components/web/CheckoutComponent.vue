@@ -30,45 +30,63 @@
                   <div class="col-12 mb-2" v-if="user">
                     <div class="alert alert-secondary border-0 d-flex align-items-center rounded-0">
                       <i class="fas fa-user-circle fa-lg me-3 text-dark"></i>
-                      <span>Comprando como: <strong>{{ user.name }} {{ user.last_name }}</strong> ({{ user.email
-                        }})</span>
+                      <span>Comprando como: <strong>{{ user.name }} {{ user.last_name }}</strong> ({{ user.email }})</span>
                     </div>
                   </div>
 
                   <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Departamento</label>
-                    <input type="text" class="form-control custom-input" v-model="form.department"
-                      placeholder="Ej: Lima">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Departamento*</label>
+                    <input type="text" class="form-control custom-input" 
+                           :class="{ 'border-danger': formErrors.department }" 
+                           v-model="form.department" @input="clearError('department')" placeholder="Ej: Lima">
+                    <span v-if="formErrors.department" class="text-danger small mt-1 d-block fw-bold">{{ formErrors.department }}</span>
                   </div>
+                  
                   <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Provincia</label>
-                    <input type="text" class="form-control custom-input" v-model="form.province" placeholder="Ej: Lima">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Provincia*</label>
+                    <input type="text" class="form-control custom-input" 
+                           :class="{ 'border-danger': formErrors.province }" 
+                           v-model="form.province" @input="clearError('province')" placeholder="Ej: Lima">
+                    <span v-if="formErrors.province" class="text-danger small mt-1 d-block fw-bold">{{ formErrors.province }}</span>
                   </div>
+                  
                   <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Distrito</label>
-                    <input type="text" class="form-control custom-input" v-model="form.district"
-                      placeholder="Ej: Miraflores">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Distrito*</label>
+                    <input type="text" class="form-control custom-input" 
+                           :class="{ 'border-danger': formErrors.district }" 
+                           v-model="form.district" @input="clearError('district')" placeholder="Ej: Miraflores">
+                    <span v-if="formErrors.district" class="text-danger small mt-1 d-block fw-bold">{{ formErrors.district }}</span>
                   </div>
 
                   <div class="col-12 mt-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Dirección (Calle, Av.,
-                      Jr.)</label>
-                    <input type="text" class="form-control custom-input" v-model="form.street"
-                      placeholder="Av. Larco 123">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Dirección (Calle, Av., Jr.)*</label>
+                    <input type="text" class="form-control custom-input" 
+                           :class="{ 'border-danger': formErrors.street }" 
+                           v-model="form.street" @input="clearError('street')" placeholder="Av. Larco 123">
+                    <span v-if="formErrors.street" class="text-danger small mt-1 d-block fw-bold">{{ formErrors.street }}</span>
                   </div>
+                  
                   <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Número / Dpto</label>
-                    <input type="text" class="form-control custom-input" v-model="form.number" placeholder="Ej: 402">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Número / Dpto*</label>
+                    <input type="text" class="form-control custom-input" 
+                           :class="{ 'border-danger': formErrors.number }" 
+                           v-model="form.number" @input="clearError('number')" placeholder="Ej: 402">
+                    <span v-if="formErrors.number" class="text-danger small mt-1 d-block fw-bold">{{ formErrors.number }}</span>
                   </div>
+                  
                   <div class="col-md-8">
                     <label class="form-label small fw-bold text-muted text-uppercase">Referencia (Opcional)</label>
-                    <input type="text" class="form-control custom-input" v-model="form.detail"
-                      placeholder="Frente al parque...">
+                    <input type="text" class="form-control custom-input" v-model="form.detail" placeholder="Frente al parque...">
                   </div>
 
                   <div class="col-md-6 mt-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Celular de contacto</label>
-                    <input type="tel" class="form-control custom-input" v-model="form.phone" placeholder="999 999 999">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Celular de contacto*</label>
+                    <div class="input-group" :class="{ 'border border-danger rounded': formErrors.phone }">
+                      <span class="input-group-text border-0 bg-transparent text-muted fw-bold pe-1">+51</span>
+                      <input type="tel" class="form-control custom-input ps-2" 
+                             v-model="form.phone" @input="clearError('phone')" maxlength="9" placeholder="999999999">
+                    </div>
+                    <span v-if="formErrors.phone" class="text-danger small mt-1 d-block fw-bold">{{ formErrors.phone }}</span>
                   </div>
                 </div>
               </form>
@@ -240,6 +258,7 @@ export default {
   },
   data() {
     return {
+      formErrors: {},
       stockErrors: {},
       cart: [],
       paymentMethod: 'online', // Empezamos con 'online' por defecto (mejor conversión)
@@ -303,7 +322,14 @@ export default {
     },
     prefillUserData() {
       if (this.user) {
-        this.form.phone = this.user.phone || '';
+        let phoneFromDb = this.user.phone || '';
+
+        if (phoneFromDb.startsWith('+51')) {
+          phoneFromDb = phoneFromDb.substring(3);
+        }
+
+        this.form.phone = phoneFromDb;
+
         if (this.user.addresses && this.user.addresses.length > 0) {
           const lastAddr = this.user.addresses[0];
           this.form.department = lastAddr.department;
@@ -323,13 +349,51 @@ export default {
         ? product.selectedVariant.Price
         : (product.Price || 0);
     },
+
     validateForm() {
-      if (!this.form.street || !this.form.phone || !this.form.district || !this.form.department || !this.form.province) {
-        this.errorMsg = "Por favor completa todos los campos obligatorios de envío.";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return false;
+      this.formErrors = {};
+      let isValid = true;
+
+      if (!this.form.department) {
+        this.formErrors.department = "El departamento es requerido.";
+        isValid = false;
       }
-      return true;
+      if (!this.form.province) {
+        this.formErrors.province = "La provincia es requerida.";
+        isValid = false;
+      }
+      if (!this.form.district) {
+        this.formErrors.district = "El distrito es requerido.";
+        isValid = false;
+      }
+      if (!this.form.street) {
+        this.formErrors.street = "La dirección es requerida.";
+        isValid = false;
+      }
+      if (!this.form.number) {
+        this.formErrors.number = "El número es requerido.";
+        isValid = false;
+      }
+      if (!this.form.phone) {
+        this.formErrors.phone = "El celular es requerido.";
+        isValid = false;
+      } else if (this.form.phone.length < 9) {
+        this.formErrors.phone = "El celular debe tener 9 dígitos.";
+        isValid = false;
+      }
+
+      if (!isValid) {
+        this.errorMsg = "Por favor completa los campos marcados en rojo.";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      return isValid;
+    },
+
+    clearError(field) {
+      if (this.formErrors[field]) {
+        delete this.formErrors[field];
+      }
     },
 
     
@@ -383,27 +447,27 @@ export default {
           return { ...item, Image: this.getProductImage(item) };
         });
 
-        // 1. Guardar orden pendiente en Laravel
+        let rawPhone = this.form.phone.replace(/\s+/g, '');
+        let finalPhone = rawPhone.startsWith('+51') ? rawPhone : `+51${rawPhone}`;
+
         const response = await axios.post('/checkout/process', {
           items: itemsToSend,
           shipping_address: this.form,
           payment_method: this.paymentMethod,
-          customer_phone: this.form.phone,
+          customer_phone: finalPhone,
           total_amount: this.totalAmount
         });
 
-        // VALIDACIÓN EXTRA: Si Laravel responde "éxito" pero manda un error en el JSON
         if (response.data && response.data.error) {
           this.processing = false;
           this.errorMsg = response.data.error;
           Swal.fire({ icon: 'error', title: 'Aviso', text: response.data.error, confirmButtonColor: '#000' });
-          return; // Detenemos el proceso
+          return;
         }
 
         const orderData = response.data;
         this.currentOrderReference = orderData.external_reference;
 
-        // 2. Evaluar el método
         if (this.paymentMethod === 'contraentrega') {
           this.finishPurchase();
         } else {

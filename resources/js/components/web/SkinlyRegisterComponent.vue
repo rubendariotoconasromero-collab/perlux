@@ -35,9 +35,13 @@
 
                     <div class="col-md-6 form-group">
                         <label for="phone" class="form-label">Celular*</label>
-                        <input id="phone" v-model="form.phone" type="tel" 
-                            class="form-input" :class="{ 'is-invalid': errors.phone }"
-                            placeholder="999 999 999" required @input="clearError('phone')" />
+                        <div class="input-group document-group" :class="{ 'is-invalid-border': errors.phone }">
+                            <span class="input-group-text border-0 bg-transparent text-muted fw-bold pe-1">+51</span>
+                            <div class="vr my-2"></div>
+                            <input id="phone" v-model="form.phone" type="tel" maxlength="9"
+                                class="form-control border-0 bg-transparent ps-2" 
+                                placeholder="999999999" required @input="clearError('phone')" />
+                        </div>
                         <span v-if="errors.phone" class="error-message">{{ errors.phone }}</span>
                     </div>
 
@@ -265,10 +269,12 @@ export default {
                 return;
             }
 
+            let rawPhone = form.phone.replace(/\s+/g, '');
+            let finalPhone = `+51${rawPhone}`;
             loading.value = true;
             try {
                 const response = await axios.post('/register', {
-                    email: form.email, phone: form.phone, name: form.name, 
+                    email: form.email, phone: finalPhone, name: form.name, 
                     last_name: form.lastname, dni: form.dni, password: form.password,
                     document_type: form.documentType,
                     addresses: [{
