@@ -6,7 +6,8 @@ use App\Http\Controllers\BodyController;
 use App\Http\Controllers\JeansController;
 use App\Http\Controllers\DetailBodyController;
 use App\Http\Controllers\DetailJeansController;
-use App\Http\Controllers\NosotrosController;
+use App\Http\Controllers\CarterasController;
+use App\Http\Controllers\DetailCarterasController;
 use App\Http\Controllers\LoginSiteController;
 use App\Http\Controllers\PersonalDataController;
 use App\Http\Controllers\Admin\LoginController; 
@@ -51,16 +52,19 @@ Route::get('/get_user_info', [BienvenidaController::class, 'getUserInfo']);
 // rutas sites
 Route::get('/get_collections', [CollectionController::class, 'getCollections']);
 Route::get('/get_collections_novias', [CollectionController::class, 'getCollectionsNovias']);
+Route::get('/get_collections_carteras', [CollectionController::class, 'getCollectionsCarteras']);
 
 // rutas bodys
 Route::get('/glam', [BodyController::class, 'index'])->name('bodys');
 Route::get('/novias', [JeansController::class, 'index'])->name('jeans');
+Route::get('/carteras', [CarterasController::class, 'index'])->name('carteras');
 
 Route::get('/libro-reclamaciones', [LinksController::class, 'indexClaimsBook']);
 Route::get('/informacion', [LinksController::class, 'indexBusinessInfo']);
 
 Route::get('/detail_glam', [DetailBodyController::class, 'index'])->name('detailbodys');
 Route::get('/detail_novias', [DetailJeansController::class, 'index'])->name('detailjeans');
+Route::get('/detail_carteras', [DetailCarterasController::class, 'index'])->name('detailcarteras');
 Route::get('/load_data', [BodyController::class, 'loadData']);
 
 // login

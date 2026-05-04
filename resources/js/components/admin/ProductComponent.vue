@@ -191,6 +191,7 @@
                                     <select class="form-select bg-light border-0" v-model="product.Tipo">
                                         <option :value="'Glam'">Glam</option>
                                         <option :value="'Novias'">Novias</option>
+                                        <option :value="'Carteras'">Carteras</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">

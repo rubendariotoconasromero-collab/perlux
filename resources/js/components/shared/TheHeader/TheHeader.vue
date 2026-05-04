@@ -126,6 +126,44 @@
                 </div>
               </li>
 
+              <li class="nav-item dropdown position-static" @mouseenter="showDropdown('carteras')" @mouseleave="hideDropdown('carteras')">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                  <a class="nav-link" href="/carteras" :class="{ active: activeDropdown === 'carteras' }">Carteras</a>
+                </div>
+
+                <div class="dropdown-menu collections-dropdown shadow-sm" :class="{ 'show': activeDropdown === 'carteras' }">
+                  <div class="container py-lg-4 py-2"> 
+                    <div class="row align-items-center">
+                      <div class="col-lg-3 d-none d-lg-flex justify-content-center border-end pe-4">
+                          <img src="/images/site/resources/logo_perlux.svg" alt="Perlux Carteras" class="img-fluid" style="max-width: 140px;">
+                      </div>
+                      <div class="col-lg-3 ps-lg-5 mb-4 mb-lg-0">
+                        <h6 class="dropdown-header text-dark fw-bold mb-3 d-none d-lg-block">CATEGORÍAS</h6>
+                        <ul class="list-unstyled category-list m-0">
+                          <li v-for="cat in collections_carteras.slice(0,4)" :key="cat.CollectionID">
+                              <a :href="'/carteras?CollectionID='+cat.CollectionID" class="dropdown-item">{{ cat.CollectionName }}</a>
+                          </li>
+                          <li class="mt-3"><a href="/carteras" class="dropdown-item fw-bold text-decoration-underline">Ver todo</a></li>
+                        </ul>
+                      </div>
+
+                      <div class="col-lg-6 d-none d-lg-block">
+                        <div class="row g-3">
+                          <div class="col-4 text-center" v-for="collection in collections_carteras.slice(-3)" :key="collection.CollectionID">
+                            <a :href="'/carteras?CollectionID=' + collection.CollectionID" class="product-preview-link">
+                              <div class="img-wrapper mb-2 rounded shadow-sm">
+                                <img :src="collection.Image" :alt="collection.CollectionName" class="img-fluid">
+                              </div>
+                              <span class="fw-bold text-dark small text-uppercase">{{ collection.CollectionName }}</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="/nosotros">Nosotros</a>
               </li>
@@ -137,6 +175,7 @@
 
     <div class="mobile-menu-sidebar d-lg-none" :class="{ 'active': isMobileMenuOpen }">
       <div class="mobile-menu-header">
+        <img src="/images/site/resources/logo_perlux.svg" alt="Perlux Logo" class="sidebar-logo" />
         <button class="btn-close-menu" @click="closeMobileMenu" aria-label="Cerrar Menú">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
@@ -149,6 +188,7 @@
           <li><a href="/">Inicio</a></li>
           <li><a href="/glam">Glam</a></li>
           <li><a href="/novias">Novias</a></li>
+          <li><a href="/carteras">Carteras</a></li>
           <li><a href="/nosotros">Nosotros</a></li>
         </ul>
       </div>
@@ -285,6 +325,7 @@ export default {
       products_carrito: [],
       collections: [],
       collections_novias: [],
+      collections_carteras: [],
       scrolled: false,
       processingAuth: false
     };
@@ -393,6 +434,13 @@ export default {
         } catch (e) { console.error("Error cargando menú:", e); }
     },
 
+    async getCollectionsCarteras() {
+        try {
+            const response = await axios.get('/get_collections_carteras');
+            this.collections_carteras = response.data || [];
+        } catch (e) { console.error("Error cargando menú carteras:", e); }
+    },
+
     handleCartAccess() {
         this.processingAuth = true;
         setTimeout(() => {
@@ -415,6 +463,7 @@ export default {
     this.updateLocalData();
     this.getCollections();
     this.getCollectionsNovias();
+    this.getCollectionsCarteras();
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('storage', this.updateLocalData);
     window.addEventListener('cart-updated', this.updateLocalData);
@@ -726,9 +775,14 @@ export default {
 .mobile-menu-header {
   padding: 20px 25px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #f0f0f0;
+}
+
+.sidebar-logo {
+  height: 20px;
+  width: auto;
 }
 
 .btn-close-menu {
@@ -760,12 +814,13 @@ export default {
 }
 
 .mobile-nav-list a {
-  font-size: 1.2rem;
+  font-family: 'Copperplate', 'Copperplate Gothic Light', 'Montserrat', sans-serif;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #1a1a1a;
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 3px;
   display: block;
 }
 

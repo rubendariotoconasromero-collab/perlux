@@ -124,6 +124,7 @@
                                             <option value="">Seleccionar tipo</option>
                                             <option value="glam">Glam</option>
                                             <option value="novias">Novias</option>
+                                            <option value="carteras">Carteras</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">

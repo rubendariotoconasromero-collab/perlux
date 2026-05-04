@@ -25,16 +25,16 @@
                 <i class="fas fa-sliders-h me-1"></i> FILTRAR
               </button>
 
-              <span class="text-muted small fw-bold">{{ filteredProducts.length }} Prod.</span>
+              <!-- <span class="text-muted small fw-bold">{{ filteredProducts.length }} Prod.</span> -->
               
-              <div class="view-switcher">
+              <!-- <div class="view-switcher">
                 <button class="btn-view" :class="{'active': mobileGridCols === 1}" @click="mobileGridCols = 1" title="Ver 1 columna">
                   <i class="fas fa-square fa-lg"></i>
                 </button>
                 <button class="btn-view" :class="{'active': mobileGridCols === 2}" @click="mobileGridCols = 2" title="Ver 2 columnas">
                   <i class="fas fa-th-large fa-lg"></i>
                 </button>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -56,12 +56,12 @@
                       <h5 class="product-title">{{ product.Name }}</h5>
                       <p class="product-price">S/{{ product.Price }}</p>
                     </div>
-                    <button class="btn-heart" @click="handleFavoriteClick(product)">
+                    <button class="btn-heart d-none d-md-block" @click="handleFavoriteClick(product)">
                       <i :class="product.isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
                     </button>
                   </div>
                   
-                  <div class="product-actions mt-3">
+                  <div class="product-actions mt-3 d-none d-md-block">
                     <button class="btn-buy w-100 mb-2" @click="comprar(product)">
                       COMPRAR AHORA
                     </button>

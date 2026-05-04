@@ -10,14 +10,14 @@
             <div class="product-image-wrapper-main">
               <img :src="currentImage?.ImagePath" :alt="product.Name" class="product-image-main" loading="lazy">
 
-              <button class="carousel-control prev" @click="prevImage" v-if="product.images.length > 1">
+              <button class="carousel-control prev d-none d-lg-flex" @click="prevImage" v-if="product.images.length > 1">
                 <i class="fas fa-chevron-left icon-slider"></i>
               </button>
-              <button class="carousel-control next" @click="nextImage" v-if="product.images.length > 1">
+              <button class="carousel-control next d-none d-lg-flex" @click="nextImage" v-if="product.images.length > 1">
                 <i class="fas fa-chevron-right icon-slider"></i>
               </button>
 
-              <div class="carousel-indicators-custom" v-if="product.images.length > 1">
+              <div class="carousel-indicators-custom d-none d-lg-flex" v-if="product.images.length > 1">
                 <div v-for="(image, index) in product.images" :key="index" class="indicator"
                   :class="{ active: currentSlide === index }" @click="goToSlide(index)">
                 </div>
@@ -26,6 +26,17 @@
               <div class="heart-wishlist" @click="toggleWishlist">
                 <i :class="isFavorite ? 'fas fa-heart' : 'far fa-heart'"
                   :style="{ color: isFavorite ? '#6da5da' : '#7e7e7e' }"></i>
+              </div>
+            </div>
+
+            <!-- Thumbnail slider for mobile -->
+            <div class="product-thumbnails-mobile d-lg-none mt-2" v-if="product.images.length > 1">
+              <div class="thumbnails-scroll-container">
+                <div v-for="(image, index) in product.images" :key="'thumb-'+index" 
+                     class="thumbnail-item" :class="{ active: currentSlide === index }"
+                     @click="goToSlide(index)">
+                  <img :src="image.ImagePath" :alt="product.Name + ' thumbnail'">
+                </div>
               </div>
             </div>
           </div>
@@ -124,7 +135,7 @@
             </div>
 
             <button class="btn-whatsapp w-100 mb-4" @click="pedirPorWhatsapp(product)">
-              <i class="fab fa-whatsapp me-2"></i> PEDIR POR WHATSAPP
+              <i class="fab fa-whatsapp me-2"></i> ¿SE AGOTÓ TU TALLA? TE LO PREPARAMOS
             </button>
 
             <div class="help-links d-flex flex-column gap-2 mb-4">
@@ -665,9 +676,13 @@ export default {
 <style scoped>
 
 .product-container {
-  padding-top: 140px;
+  padding-top: 100px; /* Reducido de 140px */
   padding-bottom: 50px;
   background: #fff;
+}
+
+.product-image-section {
+  margin-top: -40px; /* Bajada ligeramente de -65px */
 }
 
 .product-image-wrapper-main {
@@ -680,7 +695,7 @@ export default {
 }
 .product-image-main {
   width: 100%; height: 100%; 
-  object-fit: cover; object-position: top center;
+  object-fit: cover; object-position: center;
 }
 
 .carousel-control {
@@ -797,13 +812,24 @@ export default {
 }
 .btn-comprar:hover { background: #6da5da; color: #fff; border-color: #6da5da; }
 
-.btn-whatsapp-card, .btn-whatsapp {
+.btn-whatsapp-card {
   background-color: #ffffff; color: #2b8d4f; border: 1px solid #2b8d4f;
   font-size: 0.75rem; font-weight: 700; padding: 10px; border-radius: 0;
   text-transform: uppercase; transition: all 0.1s ease;
   display: flex; align-items: center; justify-content: center;
 }
-.btn-whatsapp-card:hover, .btn-whatsapp:hover { background-color: #2b8d4f; color: #fff; }
+.btn-whatsapp-card:hover { background-color: #2b8d4f; color: #fff; }
+
+.btn-whatsapp {
+  background-color: #ffffff; color: #2b8d4f; border: 2px solid #2b8d4f;
+  padding: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  border-radius: 0; transition: all 0.1s;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-whatsapp i {
+  font-size: 3rem;
+}
+.btn-whatsapp:hover { background: #26b16b; color: #fff; border-color: #26b16b; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
 
 
 .slider-nav-btn {
@@ -835,6 +861,49 @@ export default {
 
 .size-guide-table th { background: #f8f9fa; color: #000; font-weight: 700; padding: 15px; border-bottom: 2px solid #000; }
 .size-guide-table td { padding: 15px; border-bottom: 1px solid #eee; }
+
+/* Mobile Thumbnails Slider */
+.product-thumbnails-mobile {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 35px !important; /* Baja la sección de miniaturas */
+}
+
+.thumbnails-scroll-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 5px 0 10px 0;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.thumbnails-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.thumbnail-item {
+  flex: 0 0 80px;
+  aspect-ratio: 3 / 4;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background-color: #f8f9fa;
+}
+
+.thumbnail-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-item.active {
+  border-color: #6da5da;
+  transform: scale(0.95);
+}
 
 @media (max-width: 991px) {
   .product-details-sticky { position: static; padding: 0; }

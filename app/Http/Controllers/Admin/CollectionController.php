@@ -110,4 +110,9 @@ class CollectionController extends Controller
         $collections=Collection::orderBy('CollectionID', 'desc')->where('Tipo', 'novias')->get();
         return response()->json($collections);
     }
+
+    public function getCollectionsCarteras(){
+        $collections=Collection::orderBy('CollectionID', 'desc')->where('Tipo', 'Carteras')->get();
+        return response()->json($collections);
+    }
 }

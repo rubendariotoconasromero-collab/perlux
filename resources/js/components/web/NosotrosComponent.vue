@@ -3,20 +3,21 @@
     <TheHeader :user="user" />
 
     <section class="about-section">
-      <div class="container">
-        <div class="row align-items-center about-content">
-          <div class="col-lg-7 mb-4 mb-lg-0 about-content-section">
-            <h2 class="about-title">Sobre Nosotros: Lujo Peruano</h2>
-            <p class="about-text">
-              En Perlux, abreviatura de Peruvian Luxury, fusionamos la pasión por la belleza, el arte y el diseño con el compromiso inquebrantable de la excelencia. Nuestra marca nace de una visión: elevar los estándares de la moda peruana a un nivel comparable con las firmas de lujo más sofisticadas a nivel mundial.
-            </p>
-            <p class="about-text">
-              Cada accesorio y cada insumo que utilizamos en la elaboración de nuestros productos reflejan una dedicación minuciosa y una atención impecable a cada detalle. Creemos firmemente que el verdadero lujo reside en la calidad, la artesanía y la capacidad de cada pieza para contar una historia.
-            </p>
-          </div>
-    
-          <div class="col-lg-5 about-content-image d-flex justify-content-center">
+      <div class="container-fluid p-0">
+        <div class="row align-items-center about-content g-0">
+          <div class="col-lg-5 about-content-image d-flex justify-content-center order-1 order-lg-2">
             <img src="/images/site/images/zapato_home4.jpeg" alt="Zapato de lujo Perlux con flor blanca" class="about-image img-fluid" loading="lazy" />
+          </div>
+          <div class="col-lg-7 mb-4 mb-lg-0 about-content-section order-2 order-lg-1">
+            <div class="about-text-wrapper p-4 p-lg-5">
+              <h2 class="about-title">Sobre Nosotros: Lujo Peruano</h2>
+              <p class="about-text">
+                En Perlux, abreviatura de Peruvian Luxury, fusionamos la pasión por la belleza, el arte y el diseño con el compromiso inquebrantable de la excelencia. Nuestra marca nace de una visión: elevar los estándares de la moda peruana a un nivel comparable con las firmas de lujo más sofisticadas a nivel mundial.
+              </p>
+              <p class="about-text">
+                Cada accesorio y cada insumo que utilizamos en la elaboración de nuestros productos reflejan una dedicación minuciosa y una atención impecable a cada detalle. Creemos firmemente que el verdadero lujo reside en la calidad, la artesanía y la capacidad de cada pieza para contar una historia.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -116,6 +117,13 @@ export default {
   padding-top: 140px; /* Espacio para el header fixed */
   padding-bottom: 5rem;
   background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+}
+
+.about-section .container-fluid {
+  max-width: 1200px; /* Compactar contenido en escritorio */
+  margin: 0 auto;
 }
 
 .about-content .about-content-section {
@@ -125,7 +133,7 @@ export default {
 }
 
 .about-title {
-  font-size: 1.8rem;
+  font-size: 2.2rem; /* Un poco más grande para destacar */
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 1.5rem;
@@ -135,7 +143,7 @@ export default {
 
 .about-text {
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.8; /* Mayor espaciado entre líneas para elegancia */
   color: #555;
   margin-bottom: 1.5rem;
   text-align: justify;
@@ -143,10 +151,11 @@ export default {
 
 .about-image {
   border-radius: 0px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  max-height: 450px;
-  width: 100%;
-  object-fit: cover;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  max-height: 650px; /* Aumentado para que se vea más completa */
+  width: auto;
+  max-width: 100%;
+  object-fit: contain; /* Asegura que la imagen no se corte */
 }
 
 /* =========================================
@@ -234,7 +243,7 @@ export default {
    SHOWROOM
    ========================================= */
 .showroom-section {
-  background-color: rgb(67, 88, 116);
+  background-color: #BEBAB3;
   text-align: center;
   padding: 6rem 2rem;
 }
@@ -245,7 +254,7 @@ export default {
   letter-spacing: 1px;
   margin-bottom: 1rem;
   text-transform: uppercase;
-  color: #fff;
+  color: #1a1a1a;
 }
 
 .showroom-text {
@@ -253,13 +262,13 @@ export default {
   line-height: 1.6;
   margin-bottom: 2rem;
   opacity: 0.9;
-  color: #fff;
+  color: #1a1a1a;
 }
 
 .btn-reservar {
   background-color: transparent;
-  border: 2px solid white;
-  color: white;
+  border: 2px solid #1a1a1a;
+  color: #1a1a1a;
   padding: 12px 40px;
   font-size: 1rem;
   font-weight: 600;
@@ -271,8 +280,8 @@ export default {
 }
 
 .btn-reservar:hover {
-  background-color: #fff;
-  color: rgb(67, 88, 116);
+  background-color: #1a1a1a;
+  color: #fff;
   transform: translateY(-2px);
 }
 
@@ -281,24 +290,90 @@ export default {
    ========================================= */
 @media (max-width: 992px) {
   .about-section {
-    padding-top: 120px;
+    padding-top: 80px; /* Ajustado para estar más cerca del header pero sin solaparse */
+    padding-bottom: 2rem;
+    background-color: #fff;
   }
   
   .about-content {
-    flex-direction: column-reverse; /* Imagen arriba en móvil si se desea, o normal */
+    /* Eliminado column-reverse para que la imagen (order-1) esté arriba */
+  }
+
+  .about-image {
+    max-height: none; /* Eliminar límite para que salga completa verticalmente */
+    height: auto;
+    object-fit: contain;
+    box-shadow: none;
+  }
+
+  .about-content-section {
+    text-align: center;
+  }
+
+  .about-title {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .about-text {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .about-text-wrapper {
+    padding-top: 0.5rem !important;
   }
 
   .about-content-image {
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .vision-section, .mision-section, .valores-section {
+    min-height: 450px;
+    padding: 3rem 1rem;
   }
 
   .vision-title, .mision-title, .valores-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .vision-text, .mision-text, .valores-text {
+    font-size: 1rem;
+    line-height: 1.5;
   }
   
   .vision-overlay, .mision-overlay, .valores-overlay {
-    padding: 1.5rem;
+    padding: 2rem 1.2rem;
     max-width: 100%;
+    margin: 0 10px;
+  }
+
+  .showroom-section {
+    padding: 4rem 1.5rem;
+  }
+
+  .showroom-title {
+    font-size: 1.8rem;
+  }
+
+  .showroom-text {
+    font-size: 1rem;
+  }
+
+  .btn-reservar {
+    width: 100%;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .about-title, .vision-title, .mision-title, .valores-title, .showroom-title {
+    font-size: 1.6rem;
+  }
+
+  .vision-overlay, .mision-overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* Un poco más oscuro en móviles muy pequeños para legibilidad */
   }
 }
 </style>
