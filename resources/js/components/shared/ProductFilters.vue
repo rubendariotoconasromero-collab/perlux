@@ -25,7 +25,9 @@
       <div class="filter-group mb-4">
         <div class="d-flex justify-content-between align-items-center cursor-pointer mb-2" @click="toggleSection('availability')">
           <label class="filter-title">DISPONIBILIDAD</label>
-          <i class="fas fa-chevron-down toggle-icon" :class="{ 'rotated': !showSections.availability }"></i>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon" :class="{ 'rotated': !showSections.availability }">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </div>
         <transition name="slide-fade">
           <div v-if="showSections.availability" class="filter-options">
@@ -48,7 +50,9 @@
       <div class="filter-group mb-4">
         <div class="d-flex justify-content-between align-items-center cursor-pointer mb-2" @click="toggleSection('collections')">
           <label class="filter-title">CATEGORÍAS</label>
-          <i class="fas fa-chevron-down toggle-icon" :class="{ 'rotated': !showSections.collections }"></i>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon" :class="{ 'rotated': !showSections.collections }">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </div>
         <transition name="slide-fade">
           <div v-if="showSections.collections" class="filter-options">
@@ -65,7 +69,9 @@
       <div class="filter-group mb-4">
         <div class="d-flex justify-content-between align-items-center cursor-pointer mb-2" @click="toggleSection('colors')">
           <label class="filter-title">COLOR</label>
-          <i class="fas fa-chevron-down toggle-icon" :class="{ 'rotated': !showSections.colors }"></i>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon" :class="{ 'rotated': !showSections.colors }">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </div>
         <transition name="slide-fade">
           <div v-if="showSections.colors" class="filter-options mt-2">
@@ -84,7 +90,9 @@
       <div class="filter-group mb-4 w-100">
         <div class="d-flex justify-content-between align-items-center cursor-pointer mb-2" @click="toggleSection('sizes')">
           <label class="filter-title">TALLA</label>
-          <i class="fas fa-chevron-down toggle-icon" :class="{ 'rotated': !showSections.sizes }"></i>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon" :class="{ 'rotated': !showSections.sizes }">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </div>
         <transition name="slide-fade">
           <div v-if="showSections.sizes" class="filter-options d-flex flex-wrap gap-2">
@@ -162,8 +170,8 @@ export default {
 .color-filter-item:hover { opacity: 0.8; }
 .btn-size { border: 1px solid #eee; min-width: 40px; height: 40px; border-radius: 0; font-size: 0.75rem; font-weight: 600; }
 .btn-size.active { background: #000; color: #fff; }
-.toggle-icon { font-size: 0.8rem; transition: transform 0.3s ease; }
-.rotated { transform: rotate(180deg); }
+.toggle-icon { transition: transform 0.3s ease; color: #666; }
+.rotated { transform: rotate(-180deg); }
 .cursor-pointer { cursor: pointer; }
 .slide-fade-enter-active, .slide-fade-leave-active { transition: all 0.15s ease; }
 .slide-fade-enter-from, .slide-fade-leave-to { opacity: 0; transform: translateY(-10px); }

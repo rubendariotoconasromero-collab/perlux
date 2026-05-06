@@ -26,6 +26,7 @@ use App\Http\Controllers\LinksController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\NosotrosController;
 
 
 
@@ -92,6 +93,8 @@ Route::middleware(['isLoggedIn'])->group(function () {
         
         // Exportar a Excel/CSV
         Route::get('/orders/export', [AdminOrderController::class, 'export']);
+
+        Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy']);
         
     });
     // Pedidos/Compras

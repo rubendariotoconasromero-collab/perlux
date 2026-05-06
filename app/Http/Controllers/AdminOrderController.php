@@ -7,6 +7,8 @@ use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductCertificate;
 use App\Models\OrderDetail;
+use App\Models\Product;
+use App\Models\ProductVariant;
 
 class AdminOrderController extends Controller
 {
@@ -134,6 +136,69 @@ class AdminOrderController extends Controller
             'status' => 'success',
             'certificates' => $savedCertificates
         ]);
+    }
+
+    /**
+     * Eliminar físicamente una orden, restaurar stock y limpiar detalles.
+     */
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = Order::with('orderDetails')->findOrFail($id);
+
+            foreach ($order->orderDetails as $detail) {
+                // 1. Restaurar stock del producto base
+                $product = Product::find($detail->ProductID);
+                if ($product) {
+                    $product->increment('StockQuantity', $detail->quantity);
+                }
+
+                // 2. Restaurar stock de la variante si existe
+                if ($detail->product_snapshot) {
+                    $snapshot = is_string($detail->product_snapshot) 
+                        ? json_decode($detail->product_snapshot, true) 
+                        : $detail->product_snapshot;
+                    
+                    $colorId = $snapshot['ColorID'] ?? null;
+                    $sizeId = $detail->SizeID;
+
+                    if ($colorId && $sizeId) {
+                        $variant = ProductVariant::where('ProductID', $detail->ProductID)
+                            ->where('SizeID', $sizeId)
+                            ->where('ColorID', $colorId)
+                            ->first();
+                        
+                        if ($variant) {
+                            $variant->increment('StockQuantity', $detail->quantity);
+                        }
+                    }
+                }
+
+                // 3. Eliminar certificados asociados
+                ProductCertificate::where('order_detail_id', $detail->OrderDetailID)->delete();
+                
+                // 4. Eliminar el detalle
+                $detail->delete();
+            }
+
+            // 5. Finalmente eliminar la orden
+            $order->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Orden eliminada y stock restaurado correctamente.'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar la orden: ' . $e->getMessage()
+            ], 500);
+        }
     }
     
 }

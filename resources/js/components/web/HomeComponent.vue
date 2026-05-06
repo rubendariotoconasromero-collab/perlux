@@ -4,61 +4,65 @@
 
     <div class="container-fluid p-0">
 
+
+      <!-- Sliders de Colecciones -->
+      <!-- Glam Slider -->
       <div class="first-section">
         <div class="slider-container">
-          <div v-for="(slide, index) in slides" :key="slide.id || index" class="slide"
-            :class="{ active: currentSlide === index }" :style="{ backgroundImage: `url(${isMobile ? slide.imageMobile : slide.image})` }">
+          <div v-for="(slide, index) in glamSlides" :key="'glam-'+index" class="slide"
+            :class="{ active: currentGlamSlider === index }" :style="{ backgroundImage: `url(${slide.image})` }">
             <div class="section-new-woman position-absolute text-white">
-              <h1 class="display-4">{{ slide.title }}</h1>
-              <h3 class="lead" v-html="slide.subtitle"></h3>
-              <a :href="slide.buttonLink" class="btn btn-lista" :class="slide.buttonClass">
-                {{ slide.buttonText }}
+              <a :href="slide.link" class="btn btn-lista btn-modern">
+                VER COLECCIÓN
               </a>
             </div>
           </div>
         </div>
-
-        <div class="slider-dots">
-          <span v-for="(slide, index) in slides" :key="index" class="dot" :class="{ active: currentSlide === index }"
-            @click="goToSlide(index)">
+        <div class="slider-dots-modern">
+          <span v-for="(slide, index) in glamSlides" :key="'glam-dot-'+index" class="dot-modern" :class="{ active: currentGlamSlider === index }"
+            @click="currentGlamSlider = index">
           </span>
         </div>
-
-        <button class="slider-arrow prev" @click="prevSlide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15,18 9,12 15,6"></polyline>
-          </svg>
-        </button>
-        <button class="slider-arrow next" @click="nextSlide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9,18 15,12 9,6"></polyline>
-          </svg>
-        </button>
       </div>
 
-      <!-- seccion categorias de perlux -->
-      <div class="container-fluid second-section" :class="{'categories-slider-mobile': isMobile}">
-        <div class="row g-0 justify-content-center h-100" :class="{'categories-wrapper': isMobile}" :style="isMobile ? { transform: `translateX(-${currentCategorySlide * (100 / categories.length)}%)` } : {}">
-          <div v-for="(cat, index) in categories" :key="cat.id" 
-               class="col-lg-6 col-md-6 col-12" :class="{'category-slide': isMobile}">
-            <div class="perlux-card" :class="{'perlux-card-start': index === 0 && !isMobile, 'perlux-card-end': index === 1 && !isMobile}">
-              <img :src="cat.image" :alt="cat.alt" class="img-fondo">
-              <div class="card-overlay">
-                <img :src="cat.logo" :alt="cat.alt" class="img-type">
-                <a :href="cat.link" class="btn btn-perlux">VER MÁS</a>
-              </div>
+      <!-- Novias Slider -->
+      <div class="first-section">
+        <div class="slider-container">
+          <div v-for="(slide, index) in noviasSlides" :key="'novias-'+index" class="slide"
+            :class="{ active: currentNoviasSlider === index }" :style="{ backgroundImage: `url(${slide.image})` }">
+            <div class="section-new-woman position-absolute text-white">
+              <a :href="slide.link" class="btn btn-lista btn-modern">
+                VER COLECCIÓN
+              </a>
             </div>
           </div>
         </div>
-
-        <!-- Indicadores para el slider de categorías en móvil -->
-        <div class="category-indicators" v-if="isMobile">
-          <span v-for="(cat, index) in categories" :key="'ind-' + index" 
-                class="indicator-bar" :class="{ active: currentCategorySlide === index }" 
-                @click="currentCategorySlide = index">
+        <div class="slider-dots-modern">
+          <span v-for="(slide, index) in noviasSlides" :key="'novias-dot-'+index" class="dot-modern" :class="{ active: currentNoviasSlider === index }"
+            @click="currentNoviasSlider = index">
           </span>
         </div>
       </div>
+
+      <!-- Carteras Slider -->
+      <div class="first-section">
+        <div class="slider-container">
+          <div v-for="(slide, index) in carterasSlides" :key="'carteras-'+index" class="slide"
+            :class="{ active: currentCarterasSlider === index }" :style="{ backgroundImage: `url(${slide.image})` }">
+            <div class="section-new-woman position-absolute text-white">
+              <a :href="slide.link" class="btn btn-lista btn-modern">
+                VER COLECCIÓN
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="slider-dots-modern">
+          <span v-for="(slide, index) in carterasSlides" :key="'carteras-dot-'+index" class="dot-modern" :class="{ active: currentCarterasSlider === index }"
+            @click="currentCarterasSlider = index">
+          </span>
+        </div>
+      </div>
+
 
       <!-- seccion de perlux glam -->
       <section class="third-section" :class="{'collection-slider-full': isMobile}">
@@ -334,71 +338,39 @@ export default {
     return {
       isMobile: false,
       favorites: [],
-      currentSlide: 0,
-      currentCategorySlide: 0,
       currentGlamIndex: 0,
       currentNoviasIndex: 0,
       currentCarterasIndex: 0,
       currentBrandSlide: 0,
-      slideInterval: null,
-      categoryInterval: null,
+      currentGlamSlider: 0,
+      currentNoviasSlider: 0,
+      currentCarterasSlider: 0,
+      glamSlides: [
+        { image: "/images/site/slider/Glam1.jpeg", link: "/glam" },
+        { image: "/images/site/slider/Glam2.jpeg", link: "/glam" },
+        { image: "/images/site/slider/Glam3.jpeg", link: "/glam" }
+      ],
+      noviasSlides: [
+        { image: "/images/site/slider/Novias1.jpeg", link: "/novias" },
+        { image: "/images/site/slider/Novias2.jpeg", link: "/novias" }
+      ],
+      carterasSlides: [
+        { image: "/images/site/slider/Carteras1.jpeg", link: "/carteras" },
+        { image: "/images/site/slider/Carteras2.jpeg", link: "/carteras" },
+        { image: "/images/site/slider/Carteras3.jpeg", link: "/carteras" }
+      ],
       glamInterval: null,
       noviasInterval: null,
       carterasInterval: null,
       brandInterval: null,
+      glamSliderInterval: null,
+      noviasSliderInterval: null,
+      carterasSliderInterval: null,
       brandImages: [
         { id: 1, url: '/images/site/slider/perlux1.png' },
         { id: 2, url: '/images/site/slider/perlux2.png' },
         { id: 3, url: '/images/site/slider/perlux3.png' },
         { id: 4, url: '/images/site/slider/perlux4.png' }
-      ],
-      categories: [
-        {
-          id: 1,
-          image: "images/site/images/zapato_home2.jpeg",
-          logo: "images/site/resources/glam_white.svg",
-          link: "/glam",
-          alt: "Glam"
-        },
-        {
-          id: 2,
-          image: "images/site/images/second-section2.jpeg",
-          logo: "images/site/resources/novias_white.svg",
-          link: "/novias",
-          alt: "Novias"
-        }
-      ],
-      slides: [
-        {
-          id: 1,
-          image: "/images/site/slider/bg1.jpg",
-          imageMobile: "/images/site/slider/bg4.jpg",
-          title: "",
-          subtitle: "",
-          buttonText: "Comprar ahora",
-          buttonLink: "#",
-          buttonClass: "btn-light"
-        },
-        {
-          id: 2,
-          image: "/images/site/slider/bg2.jpg",
-          imageMobile: "/images/site/slider/bg5.jpg",
-          title: "",
-          subtitle: "",
-          buttonText: "Ver colección",
-          buttonLink: "/glam",
-          buttonClass: "btn-dark"
-        },
-        {
-          id: 3,
-          image: "/images/site/slider/bg3.jpg",
-          imageMobile: "/images/site/slider/bg6.jpg",
-          title: "",
-          subtitle: "",
-          buttonText: "Descubrir",
-          buttonLink: "/novias",
-          buttonClass: "btn-dark"
-        }
       ],
       productos: [],
       productos_novias: [],
@@ -440,16 +412,23 @@ export default {
       }
     },
 
-    nextSlide() { this.currentSlide = (this.currentSlide + 1) % this.slides.length; },
-    prevSlide() { this.currentSlide = this.currentSlide === 0 ? this.slides.length - 1 : this.currentSlide - 1; },
-    goToSlide(index) { this.currentSlide = index; },
-    startSlideshow() { this.slideInterval = setInterval(() => { this.nextSlide(); }, 5000); },
-    stopSlideshow() { if (this.slideInterval) clearInterval(this.slideInterval); },
+    comprar(product) {
+      window.location.href = '/detail_glam?product_id=' + product.ProductID;
+    },
 
-    nextCategorySlide() { this.currentCategorySlide = (this.currentCategorySlide + 1) % this.categories.length; },
-    startCategorySlideshow() { this.categoryInterval = setInterval(() => { this.nextCategorySlide(); }, 5000); },
-    stopCategorySlideshow() { if (this.categoryInterval) clearInterval(this.categoryInterval); },
+    nextGlamSlider() { this.currentGlamSlider = (this.currentGlamSlider + 1) % this.glamSlides.length; },
+    startGlamSliderSlideshow() { this.glamSliderInterval = setInterval(() => { this.nextGlamSlider(); }, 5000); },
+    stopGlamSliderSlideshow() { if (this.glamSliderInterval) clearInterval(this.glamSliderInterval); },
 
+    nextNoviasSlider() { this.currentNoviasSlider = (this.currentNoviasSlider + 1) % this.noviasSlides.length; },
+    startNoviasSliderSlideshow() { this.noviasSliderInterval = setInterval(() => { this.nextNoviasSlider(); }, 5000); },
+    stopNoviasSliderSlideshow() { if (this.noviasSliderInterval) clearInterval(this.noviasSliderInterval); },
+
+    nextCarterasSlider() { this.currentCarterasSlider = (this.currentCarterasSlider + 1) % this.carterasSlides.length; },
+    startCarterasSliderSlideshow() { this.carterasSliderInterval = setInterval(() => { this.nextCarterasSlider(); }, 5000); },
+    stopCarterasSliderSlideshow() { if (this.carterasSliderInterval) clearInterval(this.carterasSliderInterval); },
+
+    // Mantener también los de productos y brand por si acaso
     nextGlamProduct() { if (this.productos.length > 0) this.currentGlamIndex = (this.currentGlamIndex + 1) % this.productos.length; },
     startGlamSlideshow() { this.glamInterval = setInterval(() => { this.nextGlamProduct(); }, 4000); },
     stopGlamSlideshow() { if (this.glamInterval) clearInterval(this.glamInterval); },
@@ -483,31 +462,29 @@ export default {
         if (index > -1) savedFavorites.splice(index, 1);
       }
       localStorage.setItem('favorites', JSON.stringify(savedFavorites));
-    },
-
-    comprar(product) {
-      window.location.href = '/detail_glam?product_id=' + product.ProductID;
     }
   },
   mounted() {
     this.checkMobile();
     window.addEventListener('resize', this.checkMobile);
     this.loadData();
-    this.startSlideshow();
-    this.startCategorySlideshow();
     this.startGlamSlideshow();
     this.startNoviasSlideshow();
     this.startCarterasSlideshow();
     this.startBrandSlideshow();
+    this.startGlamSliderSlideshow();
+    this.startNoviasSliderSlideshow();
+    this.startCarterasSliderSlideshow();
   },
   unmounted() {
     window.removeEventListener('resize', this.checkMobile);
-    this.stopSlideshow();
-    this.stopCategorySlideshow();
     this.stopGlamSlideshow();
     this.stopNoviasSlideshow();
     this.stopCarterasSlideshow();
     this.stopBrandSlideshow();
+    this.stopGlamSliderSlideshow();
+    this.stopNoviasSliderSlideshow();
+    this.stopCarterasSliderSlideshow();
   }
 };
 </script>
@@ -731,6 +708,7 @@ export default {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  margin-top: 100px; /* Ajuste para bajar el slider */
 }
 
 .slider-container {
@@ -747,11 +725,78 @@ export default {
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  visibility: hidden;
+  transition: opacity 1.5s ease-in-out, visibility 1.5s;
+  overflow: hidden;
 }
 
 .slide.active {
   opacity: 1;
+  visibility: visible;
+}
+
+/* Ken Burns Effect */
+.slide.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  animation: kenburns 20s ease infinite;
+  z-index: -1;
+}
+
+@keyframes kenburns {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.slider-dots-modern {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  z-index: 10;
+}
+
+.dot-modern {
+  width: 40px;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.dot-modern.active {
+  width: 80px;
+  background-color: #ffffff;
+}
+
+.btn-modern {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  color: #fff !important;
+  letter-spacing: 4px;
+  padding: 15px 45px !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-modern:hover {
+  background-color: #fff !important;
+  color: #000 !important;
+  border-color: #fff !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 .slider-dots {
@@ -1418,3 +1463,4 @@ export default {
   }
 }
 </style>
+

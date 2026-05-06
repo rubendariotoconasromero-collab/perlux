@@ -10,7 +10,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
@@ -35,9 +35,14 @@
     @vite(['resources/js/app.js'])
 
     <style>
-        /* Aplicar la fuente 'Outfit' a todo el cuerpo */
+        /* Aplicar la fuente solicitada a todo el cuerpo */
         body, html {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Copperplate', 'Copperplate Gothic Light', 'Montserrat', sans-serif;
+        }
+
+        /* Desactivar negritas en todo el proyecto */
+        *, b, strong, .fw-bold {
+            font-weight: normal !important;
         }
 
     </style>

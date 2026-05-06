@@ -5,8 +5,12 @@
       <p class="siguenos">Síguenos en <span> <br>NUESTRAS REDES</span></p>
 
       <div class="d-flex flex-column align-items-center mb-3">
-        <a href="https://www.facebook.com/profile.php?id=100049130269760" target="_blank" class="mb-2">
-          <img src="images/site/svg/facebook.svg" alt="Facebook" class="social-icon" loading="lazy">
+        <a href="https://www.instagram.com/perlux_by_jd?igsh=b2l1ZWw3Zjhxbmpq&utm_source=qr" target="_blank" class="mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon-svg" loading="lazy">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
         </a>
         <div class="website-badge">
           perluxbyjd.com
@@ -74,8 +78,8 @@
             <span class="d-lg-none toggle-icon">{{ openSections.social ? '−' : '+' }}</span>
           </h5>
           <div class="social-links d-flex justify-content-center justify-content-lg-start accordion-content" :class="{ 'show': openSections.social }">
-            <a href="https://www.facebook.com/profile.php?id=100049130269760" class="social-link me-3" aria-label="Facebook">
-              <i class="fab fa-facebook-f"></i>
+            <a href="https://www.instagram.com/perlux_by_jd?igsh=b2l1ZWw3Zjhxbmpq&utm_source=qr" class="social-link me-3" aria-label="Instagram" target="_blank">
+              <i class="fab fa-instagram"></i>
             </a>
           </div>
         </div>
@@ -89,7 +93,10 @@
     </a>
 
     <a class="arrow-top" href="#top">
-      <i class="fas fa-arrow-up float-icon text-secondary"></i>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
     </a>
   </footer>
 </template>
@@ -144,12 +151,19 @@ footer {
   font-weight: 700;
 }
 
-.social-icon {
+.social-icon, .social-icon-svg {
   width: 55px;
   height: 55px;
   object-fit: contain;
-  transition: transform 0.3s ease;
-  filter: brightness(0); /* Negro por defecto sobre fondo claro */
+  transition: all 0.3s ease;
+}
+
+.social-icon {
+  filter: brightness(0); /* Negro por defecto sobre fondo claro para imágenes */
+}
+
+.social-icon-svg {
+  stroke: #000; /* Negro por defecto para SVG */
 }
 
 .website-badge {
@@ -168,6 +182,11 @@ footer {
 .footer-section a:hover .social-icon {
   transform: scale(1.1);
   filter: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(0%) hue-rotate(198deg) brightness(91%) contrast(93%) !important;
+}
+
+.footer-section a:hover .social-icon-svg {
+  transform: scale(1.1);
+  stroke: #888; /* Gris en hover para SVG */
 }
 
 /* CONTENIDO BLANCO */
@@ -244,8 +263,8 @@ footer {
 .arrow-top {
   position: fixed;
   bottom: 100px;
-  right: 40px;
-  width: 45px;
+  right: 30px; /* Alineado con el botón de WhatsApp (right: 30px) */
+  width: 40px; /* Mismo ancho que el botón de WhatsApp para centrar el eje */
   height: auto;
   font-size: 1.5rem;
   z-index: 999;
@@ -254,6 +273,7 @@ footer {
   transition: transform 0.3s;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .arrow-top:hover {

@@ -22,64 +22,78 @@
           <div class="sticky-mobile-controls d-md-none">
             <div class="d-flex justify-content-between align-items-center py-2 px-3 bg-white border-bottom shadow-sm">
               <button class="btn btn-outline-dark btn-sm fw-bold rounded-0" @click="showMobileFilters = true">
-                <i class="fas fa-sliders-h me-1"></i> FILTRAR
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+                FILTRAR
               </button>
-
-              <!-- <span class="text-muted small fw-bold">{{ filteredProducts.length }} Prod.</span> -->
-              
-              <!-- <div class="view-switcher">
-                <button class="btn-view" :class="{'active': mobileGridCols === 1}" @click="mobileGridCols = 1" title="Ver 1 columna">
-                  <i class="fas fa-square fa-lg"></i>
-                </button>
-                <button class="btn-view" :class="{'active': mobileGridCols === 2}" @click="mobileGridCols = 2" title="Ver 2 columnas">
-                  <i class="fas fa-th-large fa-lg"></i>
-                </button>
-              </div> -->
             </div>
           </div>
 
           <div class="row row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3 g-md-4" :class="'row-cols-' + mobileGridCols">
             
-            <div class="col" v-for="(product, index) in filteredProducts" :key="product.ProductID">
-              <div class="product-card">
-                
-                <div class="product-image-wrapper-sq">
-                  <a :href="'/detail_novias?product_id=' + product.ProductID">
-                    <img :src="product.images[0]?.ImagePath" :alt="product.Name" class="product-img-full">
-                  </a>
-                  <div v-if="isOutOfStock(product)" class="out-of-stock-badge">Agotado</div>
-                </div>
-                
-                <div class="product-info">
-                  <div class="d-flex justify-content-between align-items-start mt-3">
-                    <div class="text-truncate me-2">
-                      <h5 class="product-title">{{ product.Name }}</h5>
-                      <p class="product-price">S/{{ product.Price }}</p>
-                    </div>
-                    <button class="btn-heart d-none d-md-block" @click="handleFavoriteClick(product)">
-                      <i :class="product.isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
-                    </button>
+            <!-- Loader Profesional -->
+            <div v-if="isLoadingProductData" class="col-12 text-center py-5">
+              <div class="loader-wrapper">
+                <div class="custom-loader"></div>
+                <p class="mt-3 text-muted fw-bold letter-spacing-2">CARGANDO PRODUCTOS...</p>
+              </div>
+            </div>
+
+            <template v-else>
+              <div class="col" v-for="(product, index) in filteredProducts" :key="product.ProductID">
+                <div class="product-card">
+                  
+                  <div class="product-image-wrapper-sq">
+                    <a :href="'/detail_novias?product_id=' + product.ProductID">
+                      <img :src="product.images[0]?.ImagePath" :alt="product.Name" class="product-img-full">
+                    </a>
+                    <div v-if="isOutOfStock(product)" class="out-of-stock-badge">Agotado</div>
                   </div>
                   
-                  <div class="product-actions mt-3 d-none d-md-block">
-                    <button class="btn-buy w-100 mb-2" @click="comprar(product)">
-                      COMPRAR AHORA
-                    </button>
-                    <button class="btn-whatsapp w-100" @click="pedirPorWhatsapp(product)">
-                      <i class="fab fa-whatsapp me-2"></i> PEDIR POR WHATSAPP
-                    </button>
+                  <div class="product-info">
+                    <div class="d-flex justify-content-between align-items-start mt-3">
+                      <div class="text-truncate me-2">
+                        <h5 class="product-title">{{ product.Name }}</h5>
+                        <p class="product-price">S/{{ product.Price }}</p>
+                      </div>
+                      <button class="btn-heart d-none d-md-block" @click="handleFavoriteClick(product)">
+                        <i :class="product.isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
+                      </button>
+                    </div>
+                    
+                    <div class="product-actions mt-3 d-none d-md-block">
+                      <button class="btn-buy w-100 mb-2" @click="comprar(product)">
+                        COMPRAR AHORA
+                      </button>
+                      <button class="btn-whatsapp w-100" @click="pedirPorWhatsapp(product)">
+                        <i class="fab fa-whatsapp me-2"></i> PEDIR POR WHATSAPP
+                      </button>
+                    </div>
                   </div>
+
                 </div>
-
               </div>
-            </div>
 
-            <div v-if="filteredProducts.length === 0" class="col-12 text-center py-5">
-              <div class="empty-state">
-                <i class="fas fa-search fa-3x mb-3 text-light-gray"></i>
-                <p class="text-muted">No encontramos productos con esos filtros.</p>
+              <div v-if="filteredProducts.length === 0" class="col-12 text-center py-5">
+                <div class="empty-state">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-3">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                  <p class="text-muted">No encontramos productos con esos filtros.</p>
+                </div>
               </div>
-            </div>
+            </template>
 
           </div>
         </div>
@@ -127,6 +141,7 @@ export default {
   },
   data() {
     return {
+      isLoadingProductData: false,
       selectedSort: '',
       showMobileFilters: false,
       mobileGridCols: 2,
@@ -212,25 +227,41 @@ export default {
         const response = await axios.get('/load_data');
         this.sizes = response.data.sizes || [];
         this.colors = response.data.colors || [];
-        this.products = (response.data.products.filter(item => item.Tipo === 'Novias') || []).map(p => ({
+        
+        const allProducts = response.data.products || [];
+        this.products = allProducts.filter(item => item.Tipo === 'Novias').map(p => ({
           ...p,
           isFavorite: false
         }));
         this.originalProducts = this.products;
 
-        const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        this.favorites = savedFavorites;
-        this.products.forEach(p => {
-          p.isFavorite = this.favorites.some(fav => fav.ProductID === p.ProductID);
-        });
-      } catch (e) { console.error(e); }
+        try {
+          const savedFavoritesStr = localStorage.getItem('favorites');
+          this.favorites = savedFavoritesStr ? JSON.parse(savedFavoritesStr) : [];
+        } catch (err) {
+          console.error("Error parseando favoritos:", err);
+          this.favorites = [];
+        }
+        
+        if (Array.isArray(this.favorites)) {
+          this.products.forEach(p => {
+            p.isFavorite = this.favorites.some(fav => fav.ProductID === p.ProductID);
+          });
+        } else {
+          this.favorites = [];
+        }
+      } catch (e) { 
+        console.error("Error en loadData:", e); 
+      }
     },
     
     async getCollections() {
       try {
         const response = await axios.get('/get_collections_novias');
         this.collections = response.data || [];
-      } catch (e) { console.error(e); }
+      } catch (e) { 
+        console.error("Error en getCollections:", e); 
+      }
     },
 
     filterProducts(val) { 
@@ -252,12 +283,18 @@ export default {
     },
     
     closeAuthModal() { $('#authModal').modal('hide'); },
-   
     comprar(product) { window.location.href = '/detail_novias?product_id=' + product.ProductID; }
   },
   async mounted() {
-    await this.loadData();
-    await this.getCollections();
+    this.isLoadingProductData = true;
+    try {
+      await Promise.all([this.loadData(), this.getCollections()]);
+    } catch (e) {
+      console.error("Error en mounted:", e);
+    } finally {
+      this.isLoadingProductData = false;
+    }
+    
     if (this.collection) {
       this.filters.collections.push(parseInt(this.collection));
     }
@@ -357,4 +394,32 @@ export default {
 }
 
 .text-light-gray { color: #e0e0e0; }
+
+/* Custom Loader */
+.loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.custom-loader {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.letter-spacing-2 {
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+}
 </style>

@@ -28,7 +28,7 @@
     <script src="assetsadmin/js/plugin/webfont/webfont.min.js"></script>
     <script>
         WebFont.load({
-            google: { families: ["Public Sans:300,400,500,600,700"] },
+            google: { families: ["Montserrat:300,400,500,600,700"] },
             custom: {
                 families: [
                     "Font Awesome 5 Solid",
@@ -55,6 +55,16 @@
             --skinly-dark: #4A4A4A;
             --skinly-black: #1a1a1a;
             --skinly-white: #ffffff;
+        }
+
+        /* Aplicar la fuente solicitada a todo el cuerpo */
+        body, html {
+            font-family: 'Copperplate', 'Copperplate Gothic Light', 'Montserrat', sans-serif !important;
+        }
+
+        /* Desactivar negritas en todo el proyecto */
+        *, b, strong, .fw-bold {
+            font-weight: normal !important;
         }
 
         /* 1. Header del Logo (Esquina superior izquierda) */

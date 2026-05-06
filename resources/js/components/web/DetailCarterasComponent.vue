@@ -10,14 +10,18 @@
             <div class="product-image-wrapper-main">
               <img :src="currentImage?.ImagePath" :alt="product.Name" class="product-image-main" loading="lazy">
 
-              <button class="carousel-control prev d-none d-lg-flex" @click="prevImage" v-if="product.images.length > 1">
-                <i class="fas fa-chevron-left icon-slider"></i>
+              <button class="carousel-control prev" @click="prevImage" v-if="product.images.length > 1">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
               </button>
-              <button class="carousel-control next d-none d-lg-flex" @click="nextImage" v-if="product.images.length > 1">
-                <i class="fas fa-chevron-right icon-slider"></i>
+              <button class="carousel-control next" @click="nextImage" v-if="product.images.length > 1">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
               </button>
 
-              <div class="carousel-indicators-custom d-none d-lg-flex" v-if="product.images.length > 1">
+              <div class="carousel-indicators-custom" v-if="product.images.length > 1">
                 <div v-for="(image, index) in product.images" :key="index" class="indicator"
                   :class="{ active: currentSlide === index }" @click="goToSlide(index)">
                 </div>
@@ -73,8 +77,13 @@
               </div>
               
               <div class="size-selector">
-                <div v-if="!selectedColor" class="alert-light-custom text-muted">
-                  <i class="fas fa-arrow-up me-2"></i> Selecciona un color para ver las tallas.
+                <div v-if="!selectedColor" class="alert-light-custom text-muted d-flex align-items-center">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  Selecciona un color para ver las tallas.
                 </div>
 
                 <div v-else class="d-flex flex-wrap gap-2">
@@ -85,8 +94,12 @@
                   </button>
                 </div>
 
-                <div v-if="selectedColor && !selectedSize && getAvailableSizesForSelectedColor().length > 0" class="alert-light-custom text-muted mt-1">
-                  <i class="fas fa-hand-pointer me-1"></i> Ahora, selecciona tu talla para continuar.
+                <div v-if="selectedColor && !selectedSize && getAvailableSizesForSelectedColor().length > 0" class="alert-light-custom text-muted mt-1 d-flex align-items-center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+                  Ahora, selecciona tu talla para continuar.
                 </div>
 
                 <small v-if="selectedColor && getAvailableSizesForSelectedColor().length === 0" class="text-danger mt-2 d-block">
@@ -115,9 +128,6 @@
 
             <div class="help-links d-flex flex-column gap-2 mb-4">
               <div class="qualify-link" @click="showQualifyModal">Calificar producto</div>
-              <div class="qualify-link text-primary-custom" @click="showQualifyModal">
-                ¿No encuentras tu talla? Haz tu pedido aquí
-              </div>
             </div>
 
             <div class="tabs-section mt-5">
@@ -162,7 +172,9 @@
       <div class="col-12 px-2 px-md-5">
         <div class="slider-container">
           <button class="slider-nav-btn slider-prev" @click="scrollSlider('left')">
-            <i class="fas fa-chevron-left"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
           </button>
 
           <div class="slider-wrapper" ref="productSlider">
@@ -209,7 +221,9 @@
           </div>
 
           <button class="slider-nav-btn slider-next" @click="scrollSlider('right')">
-            <i class="fas fa-chevron-right"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </button>
         </div>
       </div>
@@ -587,15 +601,20 @@ export default {
 
 .carousel-control {
   position: absolute; top: 50%; transform: translateY(-50%);
-  background: rgba(255,255,255,0.7); border: none;
-  font-size: 1.2rem; color: #8f8f8f;
-  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.9); border: 1px solid #eee;
+  color: #333;
+  width: 44px; height: 44px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   z-index: 10; transition: all 0.2s ease; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.carousel-control:hover { background: #fff; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.carousel-control:hover { background: #000; color: #fff; border-color: #000; }
 .carousel-control.prev { left: 15px; }
 .carousel-control.next { right: 15px; }
+
+@media (max-width: 991px) {
+  .carousel-control { width: 36px; height: 36px; }
+}
 
 .carousel-indicators-custom {
   position: absolute; bottom: 20px; left: 50%;
@@ -719,12 +738,15 @@ export default {
 .btn-whatsapp-card:hover { background-color: #2b8d4f; color: #fff; }
 
 .slider-nav-btn {
-  position: absolute; top: 40%; transform: translateY(-50%);
+  position: absolute; top: 50%; transform: translateY(-50%);
   width: 45px; height: 45px; border-radius: 50%;
   background: #fff; border: 1px solid #eee;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 5;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
-  color: #000; font-size: 1.2rem;
+  color: #000; transition: all 0.2s ease;
+}
+.slider-nav-btn:hover {
+  background: #000; color: #fff; border-color: #000;
 }
 .slider-prev { left: 5px; }
 .slider-next { right: 5px; }

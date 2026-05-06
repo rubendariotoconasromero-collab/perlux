@@ -7,8 +7,21 @@
         <title>Laravel</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
+
+        <style>
+            /* Aplicar la fuente solicitada a todo el cuerpo */
+            body, html {
+                font-family: 'Copperplate', 'Copperplate Gothic Light', 'Montserrat', sans-serif !important;
+            }
+
+            /* Desactivar negritas en todo el proyecto */
+            *, b, strong, .fw-bold {
+                font-weight: normal !important;
+            }
+        </style>
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))

@@ -6,9 +6,7 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Merienda:wght@300..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
@@ -38,30 +36,19 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link href="assets/css/bootstrap-extended.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="assets/css/app.css" rel="stylesheet">
     <link href="assets/css/icons.css" rel="stylesheet">
     <style ref="css">
-        /* body {
-            font-family: "Roboto Condensed", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 300;
-            font-style: normal;
-        } */
-
-        body {
-            font-family: 'Open Sans', 'Roboto Condensed', sans-serif;
-            font-weight: 400;
-            font-size: 16px;
-            letter-spacing: -0.3px;
+        /* Aplicar la fuente solicitada a todo el cuerpo */
+        body, html {
+            font-family: 'Copperplate', 'Copperplate Gothic Light', 'Montserrat', sans-serif !important;
         }
 
+        /* Desactivar negritas en todo el proyecto */
+        *, b, strong, .fw-bold {
+            font-weight: normal !important;
+        }
     </style>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {{-- <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa:wght@300..700&family=Merienda:wght@300..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> --}}
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Comfortaa :wght@300..500&family=Merienda:wght@400&family=Roboto+Condensed:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 
     @vite(['resources/js/app.js'])
     <title>Perlux</title>

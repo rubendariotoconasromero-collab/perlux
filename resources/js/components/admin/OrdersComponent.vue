@@ -93,10 +93,14 @@
                                                 }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <div class="action-buttons">
+                                            <div class="action-buttons d-flex justify-content-center gap-2">
                                                 <a href="#" class="btn-action text-secondary"
                                                     @click.prevent="viewOrder(order)" title="Ver Detalle">
                                                     <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="#" class="btn-action text-danger"
+                                                    @click.prevent="confirmDelete(order)" title="Eliminar Orden">
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </a>
                                             </div>
                                         </td>
@@ -530,6 +534,41 @@ export default {
         closeView() {
             this.vista = 'listado';
             this.orderView = {};
+        },
+
+        async confirmDelete(order) {
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: `Se eliminará físicamente la orden #${order.external_reference} y se restaurará el stock de los productos. Esta acción no se puede deshacer.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
+                this.deleteOrder(order.OrderID);
+            }
+        },
+
+        async deleteOrder(id) {
+            this.cargando = true;
+            try {
+                const response = await axios.delete(`/admin/orders/${id}`);
+                if (response.data.success) {
+                    this.mostrarNotificacion('Eliminado', response.data.message, 'success');
+                    this.getOrders(); // Recargar lista
+                } else {
+                    this.mostrarNotificacion('Error', response.data.message, 'error');
+                }
+            } catch (error) {
+                console.error("Error eliminando orden:", error);
+                this.mostrarNotificacion('Error', 'No se pudo eliminar la orden', 'error');
+            } finally {
+                this.cargando = false;
+            }
         },
 
         async updateOrderStatus() {
